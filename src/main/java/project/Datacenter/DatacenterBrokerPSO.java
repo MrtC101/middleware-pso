@@ -21,6 +21,7 @@ public class DatacenterBrokerPSO extends DatacenterBrokerSimple {
 
     public static void main(String[] args){
         final CloudSimPlus simulation = new CloudSimPlus();
+        System.out.println("Running...");
         new DatacenterBrokerPSO(simulation);
     }
 }
