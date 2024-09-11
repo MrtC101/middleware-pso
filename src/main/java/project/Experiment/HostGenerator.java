@@ -9,9 +9,7 @@ import org.cloudsimplus.resources.Pe;
 import org.cloudsimplus.resources.PeSimple;
 import org.cloudsimplus.schedulers.vm.VmSchedulerTimeShared;
 
-public class HostGenerator {
-    private int minHosts;
-    private int maxHosts;
+public class HostGenerator extends GeneratorAbstract<Host> {
 
     private int minHostMips;
     private int maxHostMips;
@@ -35,8 +33,7 @@ public class HostGenerator {
     public HostGenerator(int minHosts, int maxHosts, int minHostMips, int maxHostMips, int minHostRam, int maxHostRam,
             int minHostBw, int maxHostBw, int minHostStorage, int maxHostStorage, int minPesNumber, int maxPesNumber,
             boolean heterogeneous, int seed) {
-        this.minHosts = minHosts;
-        this.maxHosts = maxHosts;
+        super(minHosts, maxHosts);
         this.minHostMips = minHostMips;
         this.maxHostMips = maxHostMips;
         this.minHostRam = minHostRam;
@@ -54,8 +51,7 @@ public class HostGenerator {
     public HostGenerator(int minHosts, int maxHosts, int minHostMips, int maxHostMips, int minHostRam, int maxHostRam,
             int minHostBw, int maxHostBw, int minHostStorage, int maxHostStorage, int minPesNumber, int maxPesNumber,
             boolean heterogeneous) {
-        this.minHosts = minHosts;
-        this.maxHosts = maxHosts;
+        super(minHosts, maxHosts);
         this.minHostMips = minHostMips;
         this.maxHostMips = maxHostMips;
         this.minHostRam = minHostRam;
@@ -72,14 +68,13 @@ public class HostGenerator {
     }
 
     private Host createHost(int mips, int ram, ArrayList<Pe> peList, int bw, int storage) {
-    
         Host host = new HostSimple(ram, bw, storage, peList);
         host.setVmScheduler(new VmSchedulerTimeShared()); // !Parametrizar
         return host;
     }
 
     public ArrayList<Host> generate() {
-        int hosts = this.random.nextInt((this.maxHosts - this.minHosts) + 1) + this.minHosts;
+        int hosts = this.random.nextInt((this.max - this.min) + 1) + this.min;
         int mips;
         int ram;
         int pesNumber;
@@ -106,7 +101,7 @@ public class HostGenerator {
                 ram = this.random.nextInt((this.maxHostRam - this.minHostRam) + 1) + this.minHostRam;
                 pesNumber = this.random.nextInt((this.maxPesNumber - this.minPesNumber) + 1) + this.minPesNumber;
                 peList = new ArrayList<Pe>(pesNumber);
-                for (int j = 0; i < pesNumber; j++) {
+                for (int j = 0; j < pesNumber; j++) {
                     peList.add(new PeSimple(mips));
                 }
                 bw = this.random.nextInt((this.maxHostBw - this.minHostBw) + 1) + this.minHostBw;

@@ -6,9 +6,7 @@ import java.util.Random;
 import org.cloudsimplus.cloudlets.Cloudlet;
 import org.cloudsimplus.cloudlets.CloudletSimple;
 
-public class TaskGenerator {
-    private int minTasks;
-    private int maxTasks;
+public class TaskGenerator extends GeneratorAbstract<Cloudlet> {
 
     private int minFileSize;
     private int maxFileSize;
@@ -28,8 +26,7 @@ public class TaskGenerator {
 
     public TaskGenerator(int minTasks, int maxTasks, int minFileSize, int maxFileSize, int minOutputSize,
             int maxOutputSize, int minPesNumber, int maxPesNumber, int minLength, int maxLength, boolean heterogeneous, int seed) {
-        this.minTasks = minTasks;
-        this.maxTasks = maxTasks;
+        super(minTasks, maxTasks);
         this.minFileSize = minFileSize;
         this.maxFileSize = maxFileSize;
         this.minOutputSize = minOutputSize;
@@ -44,8 +41,7 @@ public class TaskGenerator {
 
     public TaskGenerator(int minTasks, int maxTasks, int minFileSize, int maxFileSize, int minOutputSize,
             int maxOutputSize, int minPesNumber, int maxPesNumber, int minLength, int maxLength, boolean heterogeneous) {
-        this.minTasks = minTasks;
-        this.maxTasks = maxTasks;
+        super(minTasks, maxTasks);
         this.minFileSize = minFileSize;
         this.maxFileSize = maxFileSize;
         this.minOutputSize = minOutputSize;
@@ -67,7 +63,7 @@ public class TaskGenerator {
     }
 
     public ArrayList<Cloudlet> generate(){
-        int tasks = this.random.nextInt((this.maxTasks - this.minTasks) + 1) + this.minTasks;
+        int tasks = this.random.nextInt((this.max - this.min) + 1) + this.min;
         int fileSize;
         int outputSize;
         int pesNumber;

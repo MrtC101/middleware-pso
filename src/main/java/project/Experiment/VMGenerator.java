@@ -9,9 +9,7 @@ import org.cloudsimplus.schedulers.vm.VmSchedulerTimeShared;
 import org.cloudsimplus.vms.Vm;
 import org.cloudsimplus.vms.VmSimple;
 
-public class VMGenerator {
-    private int minVMs;
-    private int maxVMs;
+public class VMGenerator extends GeneratorAbstract<Vm>{
 
     private int minVMRam;
     private int maxVMRam;
@@ -36,8 +34,7 @@ public class VMGenerator {
 
     public VMGenerator(int minVMs, int maxVMs, int minVMRam, int maxVMRam, int minVMBw, int maxVMBw, int minVMStorage,
             int maxVMStorage, int minVMMips, int maxVMMips, int minVMPes, int maxVMPes, boolean heterogeneous, int seed) {
-        this.minVMs = minVMs;
-        this.maxVMs = maxVMs;
+        super(minVMs, maxVMs);
         this.minVMRam = minVMRam;
         this.maxVMRam = maxVMRam;
         this.minVMMips = minVMMips;
@@ -55,8 +52,7 @@ public class VMGenerator {
 
     public VMGenerator(int minVMs, int maxVMs, int minVMRam, int maxVMRam, int minVMBw, int maxVMBw, int minVMStorage,
             int maxVMStorage, int minVMMips, int maxVMMips, int minVMPes, int maxVMPes, boolean heterogeneous) {
-        this.minVMs = minVMs;
-        this.maxVMs = maxVMs;
+        super(minVMs, maxVMs);
         this.minVMRam = minVMRam;
         this.maxVMRam = maxVMRam;
         this.minVMBw = minVMBw;
@@ -82,7 +78,7 @@ public class VMGenerator {
     }
 
     public ArrayList<Vm> generate(){
-        int vms = this.random.nextInt((this.maxVMs - this.minVMs) + 1) + this.minVMs;
+        int vms = this.random.nextInt((this.max - this.min) + 1) + this.min;
         int mips;
         int ram;
         int pesNumber;
