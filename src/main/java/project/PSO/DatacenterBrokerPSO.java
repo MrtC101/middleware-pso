@@ -1,14 +1,14 @@
 package project.PSO;
 
+import java.util.ArrayList;
+import java.util.Map;
 import org.cloudsimplus.brokers.DatacenterBrokerAbstract;
 import org.cloudsimplus.brokers.DatacenterBrokerSimple;
 import org.cloudsimplus.cloudlets.Cloudlet;
 import org.cloudsimplus.core.CloudSimPlus;
 import org.cloudsimplus.vms.Vm;
-import java.util.ArrayList;
-import java.util.Map;
-import net.sourceforge.jswarm_pso.Swarm;
 import me.tongfei.progressbar.ProgressBar;
+import net.sourceforge.jswarm_pso.Swarm;
 
 /**
  * This class based on a {@link DatacenterBrokerAbstract} an implementation of a PSO based algorithm
@@ -63,7 +63,8 @@ public class DatacenterBrokerPSO extends DatacenterBrokerSimple {
         ArrayList<Cloudlet> cloudlets = (ArrayList<Cloudlet>) this.getCloudletWaitingList();
         ArrayList<Vm> vms = (ArrayList<Vm>) this.getVmWaitingList();
         PSOFitnessFunction ff = new PSOFitnessFunction(cloudlets, vms);
-        PSOParticle exampleParticle = new PSOParticle(cloudlets.size());
+        PSOParticle.CLOUDLET_SIZE = cloudlets.size();
+        PSOParticle exampleParticle = new PSOParticle();
         PSOParticleUpdate velocityFunction = new PSOParticleUpdate(exampleParticle, W, C1, C2);
         Swarm swarm = new Swarm(popSize, exampleParticle, ff);
 
@@ -83,7 +84,7 @@ public class DatacenterBrokerPSO extends DatacenterBrokerSimple {
 
         System.out.println("The best fitness value: " + swarm.getBestFitness());
         System.out.println("The best solution is: ");
-        System.out.println(bestParticle.toString());
+        System.out.println(bestParticle);
 
         this.precomputedMapping = bestParticle.mapCloudletsToVms(cloudlets, vms);
     }
