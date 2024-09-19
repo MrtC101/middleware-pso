@@ -12,16 +12,15 @@ import net.sourceforge.jswarm_pso.Particle;
  */
 public class PSOParticle extends Particle {
 
+    static int CLOUDLET_SIZE = 0;
+
     /**
      * Particle constructor.
-     * 
-     * @param numTasks The number of task. This parameter determines the dimensions of the possible
-     *        solutions vector.
      */
-    public PSOParticle(int numTasks) {
-        super(numTasks);
+    public PSOParticle(){
+        super(CLOUDLET_SIZE);
     }
-
+ 
     /**
      * Maps a list of Cloudlets to a list of VMs based on particle positions.
      * 
