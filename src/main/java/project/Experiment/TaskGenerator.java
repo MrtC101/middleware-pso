@@ -24,6 +24,11 @@ public class TaskGenerator extends GeneratorAbstract<Cloudlet> {
 
     private Random random;
 
+    int T_FILESIZE_MULT = 1000;
+    int T_OUTSIZE_MULT = 100;
+    int T_LENGTH_MULT = 512;
+    int T_PES_MULT = 1;
+
     public TaskGenerator(int minTasks, int maxTasks, int minFileSize, int maxFileSize, int minOutputSize,
             int maxOutputSize, int minPesNumber, int maxPesNumber, int minLength, int maxLength, boolean heterogeneous, int seed) {
         super(minTasks, maxTasks);
@@ -70,19 +75,19 @@ public class TaskGenerator extends GeneratorAbstract<Cloudlet> {
         int length;
         ArrayList<Cloudlet> taskList = new ArrayList<Cloudlet>(tasks);
         if (this.heterogeneous){
-            fileSize = this.random.nextInt((this.maxFileSize - this.minFileSize) + 1) + this.minFileSize;
-            outputSize = this.random.nextInt((this.maxOutputSize - this.minOutputSize) + 1) + this.minOutputSize;
+            fileSize = Utils.randomIntMultiple(this.minFileSize, this.maxFileSize, T_FILESIZE_MULT);
+            outputSize = Utils.randomIntMultiple(this.minOutputSize, this.maxOutputSize, T_OUTSIZE_MULT);
             pesNumber = this.random.nextInt((this.maxPesNumber - this.minPesNumber) + 1) + this.minPesNumber;
-            length = this.random.nextInt((this.maxLength - this.minLength) + 1) + this.minLength;
+            length = Utils.randomIntMultiple(this.minLength, this.maxLength, T_LENGTH_MULT);
             for (int i = 0; i < tasks; i++) {
                 taskList.add(createCloudlet(fileSize, outputSize, pesNumber, length));
             }
         } else {
             for (int i = 0; i < tasks; i++) {
-                fileSize = this.random.nextInt((this.maxFileSize - this.minFileSize) + 1) + this.minFileSize;
-                outputSize = this.random.nextInt((this.maxOutputSize - this.minOutputSize) + 1) + this.minOutputSize;
+                fileSize = Utils.randomIntMultiple(this.minFileSize, this.maxFileSize, T_FILESIZE_MULT);
+                outputSize = Utils.randomIntMultiple(this.minOutputSize, this.maxOutputSize, T_OUTSIZE_MULT);
                 pesNumber = this.random.nextInt((this.maxPesNumber - this.minPesNumber) + 1) + this.minPesNumber;
-                length = this.random.nextInt((this.maxLength - this.minLength) + 1) + this.minLength;
+                length = Utils.randomIntMultiple(this.minLength, this.maxLength, T_LENGTH_MULT);
                 taskList.add(createCloudlet(fileSize, outputSize, pesNumber, length));
             }
         }
