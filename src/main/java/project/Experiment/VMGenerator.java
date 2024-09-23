@@ -46,8 +46,7 @@ public class VMGenerator extends GeneratorAbstract<Vm>{
     int VM_BW_MULT = 100;
     int VM_PES_MULT = 1;
 
-    public VMGenerator(int minVMs, int maxVMs, int minVMRam, int maxVMRam, int minVMBw, int maxVMBw, int minVMStorage,
-            int maxVMStorage, int minVMMips, int maxVMMips, int minVMPes, int maxVMPes, boolean heterogeneous, int seed) {
+    public VMGenerator(int minVMs, int maxVMs, int minVMRam, int maxVMRam, int minVMBw, int maxVMBw, int minVMStorage, int maxVMStorage, int minVMMips, int maxVMMips, int minVMPes, int maxVMPes, boolean heterogeneous, int taskScheduler, int seed) {
         super(minVMs, maxVMs);
         this.minVMRam = minVMRam;
         this.maxVMRam = maxVMRam;
@@ -60,12 +59,13 @@ public class VMGenerator extends GeneratorAbstract<Vm>{
         this.minVMPes = minVMPes;
         this.maxVMPes = maxVMPes;
         this.heterogeneous = heterogeneous;
+        this.taskScheduler = taskScheduler;
         this.random = new Random(seed);
         
     }
 
     public VMGenerator(int minVMs, int maxVMs, int minVMRam, int maxVMRam, int minVMBw, int maxVMBw, int minVMStorage,
-            int maxVMStorage, int minVMMips, int maxVMMips, int minVMPes, int maxVMPes, boolean heterogeneous) {
+            int maxVMStorage, int minVMMips, int maxVMMips, int minVMPes, int maxVMPes, boolean heterogeneous, int taskScheduler) {
         super(minVMs, maxVMs);
         this.minVMRam = minVMRam;
         this.maxVMRam = maxVMRam;
@@ -78,6 +78,7 @@ public class VMGenerator extends GeneratorAbstract<Vm>{
         this.minVMPes = minVMPes;
         this.maxVMPes = maxVMPes;
         this.heterogeneous = heterogeneous;
+        this.taskScheduler = taskScheduler;
         this.random = new Random();
 
     }

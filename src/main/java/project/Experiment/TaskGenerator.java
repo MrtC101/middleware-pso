@@ -25,7 +25,7 @@ public class TaskGenerator extends GeneratorAbstract<Cloudlet> {
     private Random random;
 
     int T_FILESIZE_MULT = 1000;
-    int T_OUTSIZE_MULT = 100;
+    int T_OUTSIZE_MULT = 1000;
     int T_LENGTH_MULT = 512;
     int T_PES_MULT = 1;
 
