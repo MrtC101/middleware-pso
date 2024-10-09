@@ -7,8 +7,10 @@ import org.cloudsimplus.hosts.Host;
 import org.cloudsimplus.hosts.HostSimple;
 import org.cloudsimplus.resources.Pe;
 import org.cloudsimplus.resources.PeSimple;
-import org.cloudsimplus.schedulers.vm.VmSchedulerTimeShared;
 import org.cloudsimplus.schedulers.vm.VmSchedulerSpaceShared;
+import org.cloudsimplus.schedulers.vm.VmSchedulerTimeShared;
+
+import project.Utils.RandomUtils;
 
 
 public class HostGenerator extends GeneratorAbstract<Host> {
@@ -101,29 +103,29 @@ public class HostGenerator extends GeneratorAbstract<Host> {
         ArrayList<Pe> peList;
         ArrayList<Host> hostList = new ArrayList<>(hosts);
         if (this.heterogeneous) {
-            mips = Utils.randomIntMultiple(this.minHostMips, this.maxHostMips, H_MIPS_MULT);
-            ram = Utils.randomIntMultiple(this.minHostRam, this.maxHostRam, H_RAM_MULT);
+            mips = RandomUtils.randomIntMultiple(this.minHostMips, this.maxHostMips, H_MIPS_MULT);
+            ram = RandomUtils.randomIntMultiple(this.minHostRam, this.maxHostRam, H_RAM_MULT);
             pesNumber = this.random.nextInt((this.maxPesNumber - this.minPesNumber) + 1) + this.minPesNumber;
             peList = new ArrayList<Pe>(pesNumber);
             for (int i = 0; i < pesNumber; i++) {
                 peList.add(new PeSimple(mips));
             }
-            bw = Utils.randomIntMultiple(this.minHostBw, this.maxHostBw, H_BW_MULT);
-            storage = Utils.randomIntMultiple(this.minHostStorage, this.maxHostStorage, H_STORAGE_MULT);
+            bw = RandomUtils.randomIntMultiple(this.minHostBw, this.maxHostBw, H_BW_MULT);
+            storage = RandomUtils.randomIntMultiple(this.minHostStorage, this.maxHostStorage, H_STORAGE_MULT);
             for (int i = 0; i < hosts; i++) {
                 hostList.add(createHost(mips, ram, peList, bw, storage));
             }
         } else {
             for (int i = 0; i < hosts; i++) {
-                mips = Utils.randomIntMultiple(this.minHostMips, this.maxHostMips, H_MIPS_MULT);
-                ram = Utils.randomIntMultiple(this.minHostRam, this.maxHostRam, H_RAM_MULT);
+                mips = RandomUtils.randomIntMultiple(this.minHostMips, this.maxHostMips, H_MIPS_MULT);
+                ram = RandomUtils.randomIntMultiple(this.minHostRam, this.maxHostRam, H_RAM_MULT);
                 pesNumber = this.random.nextInt((this.maxPesNumber - this.minPesNumber) + 1) + this.minPesNumber;
                 peList = new ArrayList<Pe>(pesNumber);
                 for (int j = 0; j < pesNumber; j++) {
                     peList.add(new PeSimple(mips));
                 }
-                bw = Utils.randomIntMultiple(this.minHostBw, this.maxHostBw, H_BW_MULT);
-                storage = Utils.randomIntMultiple(this.minHostStorage, this.maxHostStorage, H_STORAGE_MULT);
+                bw = RandomUtils.randomIntMultiple(this.minHostBw, this.maxHostBw, H_BW_MULT);
+                storage = RandomUtils.randomIntMultiple(this.minHostStorage, this.maxHostStorage, H_STORAGE_MULT);
                 hostList.add(createHost(mips, ram, peList, bw, storage));
             }
         }

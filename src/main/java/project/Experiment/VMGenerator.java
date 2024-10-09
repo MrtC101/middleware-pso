@@ -4,14 +4,13 @@ package project.Experiment;
 import java.util.ArrayList;
 import java.util.Random;
 
-
-import org.cloudsimplus.schedulers.cloudlet.CloudletSchedulerSpaceShared;
 import org.cloudsimplus.schedulers.cloudlet.CloudletSchedulerCompletelyFair;
+import org.cloudsimplus.schedulers.cloudlet.CloudletSchedulerSpaceShared;
 import org.cloudsimplus.schedulers.cloudlet.CloudletSchedulerTimeShared;
-import org.cloudsimplus.schedulers.vm.VmSchedulerSpaceShared;
-import org.cloudsimplus.schedulers.vm.VmSchedulerTimeShared;
 import org.cloudsimplus.vms.Vm;
 import org.cloudsimplus.vms.VmSimple;
+
+import project.Utils.RandomUtils;
 
 public class VMGenerator extends GeneratorAbstract<Vm>{
 
@@ -107,21 +106,21 @@ public class VMGenerator extends GeneratorAbstract<Vm>{
         int storage;
         ArrayList<Vm> vmList = new ArrayList<Vm>(vms);
         if (this.heterogeneous){
-            mips = Utils.randomIntMultiple(this.minVMMips, this.maxVMMips, VM_MIPS_MULT);
-            ram = Utils.randomIntMultiple(this.minVMRam, this.maxVMRam, VM_RAM_MULT);
+            mips = RandomUtils.randomIntMultiple(this.minVMMips, this.maxVMMips, VM_MIPS_MULT);
+            ram = RandomUtils.randomIntMultiple(this.minVMRam, this.maxVMRam, VM_RAM_MULT);
             pesNumber = this.random.nextInt((this.maxVMPes - this.minVMPes) + 1);
-            bw = Utils.randomIntMultiple(this.minVMBw, this.maxVMBw, VM_BW_MULT);
-            storage = Utils.randomIntMultiple(this.minVMStorage, this.maxVMStorage, VM_STORAGE_MULT);
+            bw = RandomUtils.randomIntMultiple(this.minVMBw, this.maxVMBw, VM_BW_MULT);
+            storage = RandomUtils.randomIntMultiple(this.minVMStorage, this.maxVMStorage, VM_STORAGE_MULT);
             for (int i = 0; i < vms; i++) {
                 vmList.add(createVM(mips, ram, pesNumber, bw, storage));
             }
         } else {
             for (int i = 0; i < vms; i++) {
-                mips = Utils.randomIntMultiple(this.minVMMips, this.maxVMMips, VM_MIPS_MULT);
-                ram = Utils.randomIntMultiple(this.minVMRam, this.maxVMRam, VM_RAM_MULT);
+                mips = RandomUtils.randomIntMultiple(this.minVMMips, this.maxVMMips, VM_MIPS_MULT);
+                ram = RandomUtils.randomIntMultiple(this.minVMRam, this.maxVMRam, VM_RAM_MULT);
                 pesNumber = this.random.nextInt((this.maxVMPes - this.minVMPes) + 1);
-                bw = Utils.randomIntMultiple(this.minVMBw, this.maxVMBw, VM_BW_MULT);
-                storage = Utils.randomIntMultiple(this.minVMStorage, this.maxVMStorage, VM_STORAGE_MULT);
+                bw = RandomUtils.randomIntMultiple(this.minVMBw, this.maxVMBw, VM_BW_MULT);
+                storage = RandomUtils.randomIntMultiple(this.minVMStorage, this.maxVMStorage, VM_STORAGE_MULT);
                 vmList.add(createVM(mips, ram, pesNumber, bw, storage));
             }
         }

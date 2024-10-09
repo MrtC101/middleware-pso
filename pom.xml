@@ -22,6 +22,13 @@
     <jacoco.unit-tests.limit.method-complexity>5</jacoco.unit-tests.limit.method-complexity>
   </properties>
   <dependencies>
+
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <version>2.3</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.cloudsimplus/cloudsim-plus -->
     <dependency>
         <groupId>org.cloudsimplus</groupId>

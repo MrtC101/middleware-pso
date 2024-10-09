@@ -6,6 +6,9 @@ import java.util.Random;
 import org.cloudsimplus.cloudlets.Cloudlet;
 import org.cloudsimplus.cloudlets.CloudletSimple;
 
+import ch.qos.logback.core.testUtil.RandomUtil;
+import project.Utils.RandomUtils;
+
 public class TaskGenerator extends GeneratorAbstract<Cloudlet> {
 
     private int minFileSize;
@@ -75,19 +78,19 @@ public class TaskGenerator extends GeneratorAbstract<Cloudlet> {
         int length;
         ArrayList<Cloudlet> taskList = new ArrayList<Cloudlet>(tasks);
         if (this.heterogeneous){
-            fileSize = Utils.randomIntMultiple(this.minFileSize, this.maxFileSize, T_FILESIZE_MULT);
-            outputSize = Utils.randomIntMultiple(this.minOutputSize, this.maxOutputSize, T_OUTSIZE_MULT);
+            fileSize = RandomUtils.randomIntMultiple(this.minFileSize, this.maxFileSize, T_FILESIZE_MULT);
+            outputSize = RandomUtils.randomIntMultiple(this.minOutputSize, this.maxOutputSize, T_OUTSIZE_MULT);
             pesNumber = this.random.nextInt((this.maxPesNumber - this.minPesNumber) + 1) + this.minPesNumber;
-            length = Utils.randomIntMultiple(this.minLength, this.maxLength, T_LENGTH_MULT);
+            length = RandomUtils.randomIntMultiple(this.minLength, this.maxLength, T_LENGTH_MULT);
             for (int i = 0; i < tasks; i++) {
                 taskList.add(createCloudlet(fileSize, outputSize, pesNumber, length));
             }
         } else {
             for (int i = 0; i < tasks; i++) {
-                fileSize = Utils.randomIntMultiple(this.minFileSize, this.maxFileSize, T_FILESIZE_MULT);
-                outputSize = Utils.randomIntMultiple(this.minOutputSize, this.maxOutputSize, T_OUTSIZE_MULT);
+                fileSize = RandomUtils.randomIntMultiple(this.minFileSize, this.maxFileSize, T_FILESIZE_MULT);
+                outputSize = RandomUtils.randomIntMultiple(this.minOutputSize, this.maxOutputSize, T_OUTSIZE_MULT);
                 pesNumber = this.random.nextInt((this.maxPesNumber - this.minPesNumber) + 1) + this.minPesNumber;
-                length = Utils.randomIntMultiple(this.minLength, this.maxLength, T_LENGTH_MULT);
+                length = RandomUtils.randomIntMultiple(this.minLength, this.maxLength, T_LENGTH_MULT);
                 taskList.add(createCloudlet(fileSize, outputSize, pesNumber, length));
             }
         }
