@@ -1,0 +1,40 @@
+costPerSec: 0.05
+costPerMem: 0.01
+costPerStorage: 0.001
+costPerBw: 0.002
+
+hosts:
+  - size: [10]
+    heterogeneous: false
+    ram: [4096]
+    storage: [100000]
+    bw: [2000]
+    pesNumber: [8]
+    mips: [10000]
+    vmScheduler: 0 
+
+vms:
+  - size: [10]
+    heterogeneous: false
+    ram: [2048]
+    storage: [10000]
+    bw: [2000]
+    pesNumber: [2]
+    mips: [500]
+    taskScheduler: 0
+  - size: [10]
+    heterogeneous: false
+    ram: [1024]
+    storage: [20000]
+    bw: [1000]
+    pesNumber: [2]
+    mips: [1000]
+    taskScheduler: 0  
+
+tasks:
+  size: [1000, 5000]
+  heterogeneous: true
+  fileSize: [1000, 2000]
+  outputSize: [500, 1000]
+  pesNumber: [1, 2]
+  length: [10000, 20000]

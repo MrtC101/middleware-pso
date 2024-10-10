@@ -2,7 +2,6 @@ package project.Experiment;
 
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.cloudsimplus.schedulers.cloudlet.CloudletSchedulerCompletelyFair;
 import org.cloudsimplus.schedulers.cloudlet.CloudletSchedulerSpaceShared;
@@ -12,32 +11,14 @@ import org.cloudsimplus.vms.VmSimple;
 
 import project.Utils.RandomUtils;
 
-public class VMGenerator extends GeneratorAbstract<Vm>{
+public class VMGenerator implements  Generator<Vm>{
 
-    private int minVMRam;
-    private int maxVMRam;
-
-    private int minVMBw;
-    private int maxVMBw;
-
-    private int minVMMips;
-    private int maxVMMips;
-
-    private int minVMPes;
-    private int maxVMPes;
-
-    private int minVMStorage;
-    private int maxVMStorage;
-    
-    private boolean heterogeneous;
-
-    private int taskScheduler;
+    private ArrayList<DatacenterConfig.VmConfig> vmConfigs;
+    private int seed;
 
     public static final int T_SCHEDULER_TIMESHARED = 0;
     public static final int T_SCHEDULER_SPACESHARED = 1;
     public static final int T_SCHEDULER_COMPLETELYFAIR = 1;
-
-    private Random random;
 
     int VM_STORAGE_MULT = 1000;
     int VM_MIPS_MULT = 100;
@@ -45,48 +26,19 @@ public class VMGenerator extends GeneratorAbstract<Vm>{
     int VM_BW_MULT = 100;
     int VM_PES_MULT = 1;
 
-    public VMGenerator(int minVMs, int maxVMs, int minVMRam, int maxVMRam, int minVMBw, int maxVMBw, int minVMStorage, int maxVMStorage, int minVMMips, int maxVMMips, int minVMPes, int maxVMPes, boolean heterogeneous, int taskScheduler, int seed) {
-        super(minVMs, maxVMs);
-        this.minVMRam = minVMRam;
-        this.maxVMRam = maxVMRam;
-        this.minVMMips = minVMMips;
-        this.maxVMMips = maxVMMips;
-        this.minVMBw = minVMBw;
-        this.maxVMBw = maxVMBw;
-        this.minVMStorage = minVMStorage;
-        this.maxVMStorage = maxVMStorage;
-        this.minVMPes = minVMPes;
-        this.maxVMPes = maxVMPes;
-        this.heterogeneous = heterogeneous;
-        this.taskScheduler = taskScheduler;
-        this.random = new Random(seed);
-        
+    public VMGenerator(ArrayList<DatacenterConfig.VmConfig> vmConfigs, int seed) {
+        this.vmConfigs = vmConfigs;
+        this.seed = seed; 
     }
 
-    public VMGenerator(int minVMs, int maxVMs, int minVMRam, int maxVMRam, int minVMBw, int maxVMBw, int minVMStorage,
-            int maxVMStorage, int minVMMips, int maxVMMips, int minVMPes, int maxVMPes, boolean heterogeneous, int taskScheduler) {
-        super(minVMs, maxVMs);
-        this.minVMRam = minVMRam;
-        this.maxVMRam = maxVMRam;
-        this.minVMBw = minVMBw;
-        this.maxVMBw = maxVMBw;
-        this.minVMMips = minVMMips;
-        this.maxVMMips = maxVMMips;
-        this.minVMStorage = minVMStorage;
-        this.maxVMStorage = maxVMStorage;
-        this.minVMPes = minVMPes;
-        this.maxVMPes = maxVMPes;
-        this.heterogeneous = heterogeneous;
-        this.taskScheduler = taskScheduler;
-        this.random = new Random();
-
+    public VMGenerator(ArrayList<DatacenterConfig.VmConfig> vmConfigs) {
+        this.vmConfigs = vmConfigs;
     }
 
-    private Vm createVM(int mips, int ram, int pesNumber, int bw, int storage){
+    private Vm createVM(int mips, int ram, int pesNumber, int bw, int storage, int taskScheduler){
         Vm vm;
         vm = new VmSimple(mips, pesNumber);
         vm.setRam(ram).setBw(bw).setSize(storage);
-
         if (taskScheduler == T_SCHEDULER_TIMESHARED) 
             vm.setCloudletScheduler(new CloudletSchedulerTimeShared());
         if (taskScheduler == T_SCHEDULER_SPACESHARED) 
@@ -95,36 +47,33 @@ public class VMGenerator extends GeneratorAbstract<Vm>{
             vm.setCloudletScheduler(new CloudletSchedulerCompletelyFair());
         return vm;
     }
-
     
+    @Override
     public ArrayList<Vm> generate(){
-        int vms = this.random.nextInt((this.max - this.min) + 1) + this.min;
-        int mips;
-        int ram;
-        int pesNumber;
-        int bw;
-        int storage;
-        ArrayList<Vm> vmList = new ArrayList<Vm>(vms);
-        if (this.heterogeneous){
-            mips = RandomUtils.randomIntMultiple(this.minVMMips, this.maxVMMips, VM_MIPS_MULT);
-            ram = RandomUtils.randomIntMultiple(this.minVMRam, this.maxVMRam, VM_RAM_MULT);
-            pesNumber = this.random.nextInt((this.maxVMPes - this.minVMPes) + 1);
-            bw = RandomUtils.randomIntMultiple(this.minVMBw, this.maxVMBw, VM_BW_MULT);
-            storage = RandomUtils.randomIntMultiple(this.minVMStorage, this.maxVMStorage, VM_STORAGE_MULT);
-            for (int i = 0; i < vms; i++) {
-                vmList.add(createVM(mips, ram, pesNumber, bw, storage));
+        int vms, mips, ram, pesNumber, bw, storage;
+        ArrayList<Vm> vmList = new ArrayList<>();
+        for (DatacenterConfig.VmConfig vmConfig : vmConfigs) {
+            vms = RandomUtils.randomIntMultiple(vmConfig.size, 1);
+            if (vmConfig.heterogeneous){
+                mips = RandomUtils.randomIntMultiple(vmConfig.mips, VM_MIPS_MULT);
+                ram = RandomUtils.randomIntMultiple(vmConfig.ram, VM_RAM_MULT);
+                pesNumber = RandomUtils.randomIntMultiple(vmConfig.pesNumber, VM_PES_MULT);
+                bw = RandomUtils.randomIntMultiple(vmConfig.bw, VM_BW_MULT);
+                storage = RandomUtils.randomIntMultiple(vmConfig.storage, VM_STORAGE_MULT);
+                for (int i = 0; i < vms; i++) {
+                    vmList.add(createVM(mips, ram, pesNumber, bw, storage, vmConfig.taskScheduler));
+                }
+            } else {
+                for (int i = 0; i < vms; i++) {
+                    mips = RandomUtils.randomIntMultiple(vmConfig.mips, VM_MIPS_MULT);
+                    ram = RandomUtils.randomIntMultiple(vmConfig.ram, VM_RAM_MULT);
+                    pesNumber = RandomUtils.randomIntMultiple(vmConfig.pesNumber, VM_PES_MULT);
+                    bw = RandomUtils.randomIntMultiple(vmConfig.bw, VM_BW_MULT);
+                    storage = RandomUtils.randomIntMultiple(vmConfig.storage, VM_STORAGE_MULT);
+                    vmList.add(createVM(mips, ram, pesNumber, bw, storage, vmConfig.taskScheduler));
+                }
             }
-        } else {
-            for (int i = 0; i < vms; i++) {
-                mips = RandomUtils.randomIntMultiple(this.minVMMips, this.maxVMMips, VM_MIPS_MULT);
-                ram = RandomUtils.randomIntMultiple(this.minVMRam, this.maxVMRam, VM_RAM_MULT);
-                pesNumber = this.random.nextInt((this.maxVMPes - this.minVMPes) + 1);
-                bw = RandomUtils.randomIntMultiple(this.minVMBw, this.maxVMBw, VM_BW_MULT);
-                storage = RandomUtils.randomIntMultiple(this.minVMStorage, this.maxVMStorage, VM_STORAGE_MULT);
-                vmList.add(createVM(mips, ram, pesNumber, bw, storage));
-            }
-        }
+        }       
         return vmList;    
     }
-
 }

@@ -14,7 +14,6 @@ import org.cloudsimplus.vms.Vm;
 
 import project.PSO.DatacenterBrokerPSO;
 
-
 public class SimGenerator {
     private TaskGenerator taskGenerator;
     private VMGenerator vmGenerator;
@@ -22,12 +21,11 @@ public class SimGenerator {
     
     private ArrayList<DatacenterBroker> brokers;
     
-    public SimGenerator(TaskGenerator taskGenerator, VMGenerator vmGenerator, HostGenerator hostGenerator) {
-        this.taskGenerator = taskGenerator;
-        this.vmGenerator = vmGenerator;
-        this.hostGenerator = hostGenerator;
+    public SimGenerator(DatacenterConfig datacenterConfig) {
+        this.taskGenerator = new TaskGenerator(datacenterConfig.tasks);
+        this.vmGenerator = new VMGenerator(datacenterConfig.vms);
+        this.hostGenerator = new HostGenerator(datacenterConfig.hosts);
     }
-
 
     public void generateSimulation() {
         CloudSimPlus simulation;
@@ -47,18 +45,13 @@ public class SimGenerator {
             if (broker instanceof DatacenterBrokerPSO) {
                 ((DatacenterBrokerPSO) (broker)).runPSO(10, 50, 1, 1, 1);
             }
-            
         }
-    
         simulation.start();
-        
         List cloudletFinishedList;
         for (DatacenterBroker broker : brokers) {
             cloudletFinishedList = broker.getCloudletFinishedList();
             System.out.println(broker);
             new CloudletsTableBuilder(cloudletFinishedList).build();
         }
-         
-        
     }
 }
