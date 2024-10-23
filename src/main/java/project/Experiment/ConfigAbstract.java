@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 
 /**
- * Abstract class representing a general configuration.
- * Includes common properties such as size and whether the configuration is heterogeneous.
+ * Abstract class representing a general configuration. Includes common properties such as size and
+ * whether the configuration is heterogeneous.
  */
 public abstract class ConfigAbstract {
     // Size of the resources/configurations, represented as a list of integers

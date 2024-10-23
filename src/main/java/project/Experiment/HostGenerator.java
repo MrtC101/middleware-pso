@@ -14,8 +14,8 @@ import static project.Utils.RandomUtils.randomIntMultiple;
 
 
 /**
- * HostGenerator class generates hosts based on the configuration provided.
- * It supports both homogeneous and heterogeneous hosts with random variations.
+ * HostGenerator class generates hosts based on the configuration provided. It supports both
+ * homogeneous and heterogeneous hosts with random variations.
  */
 public class HostGenerator implements Generator<Host> {
     // Configuration settings for hosts from the datacenter
@@ -33,13 +33,13 @@ public class HostGenerator implements Generator<Host> {
     int H_BW_MULT = 100;
     int H_PES_MULT = 1;
 
-     /**
+    /**
      * Constructor that takes the host configuration and a random seed.
      * 
      * @param hostsConfig List of host configuration settings
      * @param seed Random seed for generating random numbers
      */
-    public HostGenerator(ArrayList<DatacenterConfig.HostConfig>  hostsConfig, int seed) {
+    public HostGenerator(ArrayList<DatacenterConfig.HostConfig> hostsConfig, int seed) {
         this.hostsConfig = hostsConfig;
         this.seed = seed;
     }
@@ -52,6 +52,7 @@ public class HostGenerator implements Generator<Host> {
     public HostGenerator(ArrayList<DatacenterConfig.HostConfig> hostsConfig) {
         this.hostsConfig = hostsConfig;
     }
+
     /**
      * Creates a host with the specified parameters.
      * 
@@ -63,15 +64,19 @@ public class HostGenerator implements Generator<Host> {
      * @param vmScheduler The type of VM scheduler to use
      * @return A new Host object with the specified configuration
      */
-    private Host createHost(int mips, int ram, ArrayList<Pe> peList, int bw, int storage, int vmScheduler) {
+    private Host createHost(int mips, int ram, ArrayList<Pe> peList, int bw, int storage,
+            int vmScheduler) {
         Host host = new HostSimple(ram, bw, storage, peList);
-        if (vmScheduler == VM_SCHEDULER_TIMESHARED) host.setVmScheduler(new VmSchedulerTimeShared());
-        if (vmScheduler == VM_SCHEDULER_SPACESHARED) host.setVmScheduler(new VmSchedulerSpaceShared());
+        if (vmScheduler == VM_SCHEDULER_TIMESHARED)
+            host.setVmScheduler(new VmSchedulerTimeShared());
+        if (vmScheduler == VM_SCHEDULER_SPACESHARED)
+            host.setVmScheduler(new VmSchedulerSpaceShared());
         return host;
     }
+
     /**
-     * Generates a list of hosts based on the configuration settings, using
-     * random values for certain parameters based on multipliers.
+     * Generates a list of hosts based on the configuration settings, using random values for
+     * certain parameters based on multipliers.
      * 
      * @return A list of generated hosts
      */
@@ -104,7 +109,8 @@ public class HostGenerator implements Generator<Host> {
 
                 // Add the generated hosts to the list
                 for (int i = 0; i < hosts; i++) {
-                    hostList.add(createHost(mips, ram, peList, bw, storage, hostConfig.vmScheduler));
+                    hostList.add(
+                            createHost(mips, ram, peList, bw, storage, hostConfig.vmScheduler));
                 }
             } else {
                 // For homogeneous hosts, generate fixed random (or not) values for each host
@@ -121,7 +127,8 @@ public class HostGenerator implements Generator<Host> {
                     storage = RandomUtils.randomIntMultiple(hostConfig.storage, H_STORAGE_MULT);
 
                     // Add the created host to the list
-                    hostList.add(createHost(mips, ram, peList, bw, storage, hostConfig.vmScheduler));
+                    hostList.add(
+                            createHost(mips, ram, peList, bw, storage, hostConfig.vmScheduler));
                 }
             }
         }

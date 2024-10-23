@@ -12,10 +12,11 @@ import org.cloudsimplus.vms.VmSimple;
 import project.Utils.RandomUtils;
 
 /**
- * VMGenerator class generates Virtual Machines (VMs) based on the provided configuration.
- * It supports both homogeneous and heterogeneous VM configurations, with random variations in certain parameters.
+ * VMGenerator class generates Virtual Machines (VMs) based on the provided configuration. It
+ * supports both homogeneous and heterogeneous VM configurations, with random variations in certain
+ * parameters.
  */
-public class VMGenerator implements  Generator<Vm>{
+public class VMGenerator implements Generator<Vm> {
 
     // List of VM configurations from the Datacenter
     private ArrayList<DatacenterConfig.VmConfig> vmConfigs;
@@ -41,7 +42,7 @@ public class VMGenerator implements  Generator<Vm>{
      */
     public VMGenerator(ArrayList<DatacenterConfig.VmConfig> vmConfigs, int seed) {
         this.vmConfigs = vmConfigs;
-        this.seed = seed; 
+        this.seed = seed;
     }
 
     /**
@@ -53,7 +54,7 @@ public class VMGenerator implements  Generator<Vm>{
         this.vmConfigs = vmConfigs;
     }
 
-/**
+    /**
      * Creates a VM with the specified parameters.
      * 
      * @param mips MIPS rating for the VM's PEs
@@ -61,32 +62,33 @@ public class VMGenerator implements  Generator<Vm>{
      * @param pesNumber Number of PEs (cores) assigned to the VM
      * @param bw Bandwidth allocated to the VM
      * @param storage Storage capacity for the VM
-     * @param taskScheduler The type of task scheduler to use (TimeShared, SpaceShared, or CompletelyFair)
+     * @param taskScheduler The type of task scheduler to use (TimeShared, SpaceShared, or
+     *        CompletelyFair)
      * @return A new Vm object with the specified configuration
      */
-    private Vm createVM(int mips, int ram, int pesNumber, int bw, int storage, int taskScheduler){
+    private Vm createVM(int mips, int ram, int pesNumber, int bw, int storage, int taskScheduler) {
         // Create a simple VM with the specified MIPS and PEs
         Vm vm = new VmSimple(mips, pesNumber);
         vm.setRam(ram).setBw(bw).setSize(storage); // Set RAM, bandwidth, and storage for the VM
 
         // Set the appropriate task scheduler for the VM
-        if (taskScheduler == T_SCHEDULER_TIMESHARED) 
+        if (taskScheduler == T_SCHEDULER_TIMESHARED)
             vm.setCloudletScheduler(new CloudletSchedulerTimeShared());
-        if (taskScheduler == T_SCHEDULER_SPACESHARED) 
+        if (taskScheduler == T_SCHEDULER_SPACESHARED)
             vm.setCloudletScheduler(new CloudletSchedulerSpaceShared());
         if (taskScheduler == T_SCHEDULER_COMPLETELYFAIR)
             vm.setCloudletScheduler(new CloudletSchedulerCompletelyFair());
         return vm;
     }
-    
+
     /**
-     * Generates a list of VMs based on the provided configuration settings, using
-     * random values for certain parameters based on predefined multipliers.
+     * Generates a list of VMs based on the provided configuration settings, using random values for
+     * certain parameters based on predefined multipliers.
      * 
      * @return A list of generated VMs
      */
     @Override
-    public ArrayList<Vm> generate(){
+    public ArrayList<Vm> generate() {
         int vms, mips, ram, pesNumber, bw, storage;
         ArrayList<Vm> vmList = new ArrayList<>();
         // Loop through each VM configuration in the list
@@ -94,8 +96,9 @@ public class VMGenerator implements  Generator<Vm>{
             // Generate a random (or not) number of VMs based on the configuration
             vms = RandomUtils.randomIntMultiple(vmConfig.size, 1);
 
-            // If the configuration is for heterogeneous VMs, generate random (or not) values for each parameter
-            if (vmConfig.heterogeneous){
+            // If the configuration is for heterogeneous VMs, generate random (or not) values for
+            // each parameter
+            if (vmConfig.heterogeneous) {
                 mips = RandomUtils.randomIntMultiple(vmConfig.mips, VM_MIPS_MULT);
                 ram = RandomUtils.randomIntMultiple(vmConfig.ram, VM_RAM_MULT);
                 pesNumber = RandomUtils.randomIntMultiple(vmConfig.pesNumber, VM_PES_MULT);
@@ -119,7 +122,7 @@ public class VMGenerator implements  Generator<Vm>{
                     vmList.add(createVM(mips, ram, pesNumber, bw, storage, vmConfig.taskScheduler));
                 }
             }
-        }       
-        return vmList; // Return the generated VM list    
+        }
+        return vmList; // Return the generated VM list
     }
 }

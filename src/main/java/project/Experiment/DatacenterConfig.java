@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 /**
  * DatacenterConfig class holds the configuration of a datacenter, including cost settings and lists
- * of hosts, VMs, and tasks. It also contains nested classes for HostConfig, VmConfig, and TasksConfig.
+ * of hosts, VMs, and tasks. It also contains nested classes for HostConfig, VmConfig, and
+ * TasksConfig.
  */
 public class DatacenterConfig {
     // Cost per second of computation resources in the datacenter
@@ -29,8 +30,8 @@ public class DatacenterConfig {
     public TasksConfig tasks;
 
     /**
-     * Nested class representing the configuration of a host machine.
-     * Extends MachineConfigAbstract and includes the VM scheduler type.
+     * Nested class representing the configuration of a host machine. Extends MachineConfigAbstract
+     * and includes the VM scheduler type.
      */
     public static class HostConfig extends MachineConfigAbstract {
         // VM Scheduler options: TIMESHARED = 0, SPACESHARED = 1
@@ -38,17 +39,17 @@ public class DatacenterConfig {
     }
 
     /**
-     * Nested class representing the configuration of a virtual machine (VM).
-     * Extends MachineConfigAbstract and includes the task scheduler type.
+     * Nested class representing the configuration of a virtual machine (VM). Extends
+     * MachineConfigAbstract and includes the task scheduler type.
      */
     public static class VmConfig extends MachineConfigAbstract {
         // Task Scheduler options: TIMESHARED = 0, SPACESHARED = 1, COMPLETELYFAIR = 2
-        public int taskScheduler;        
+        public int taskScheduler;
     }
 
     /**
-     * Nested class representing the configuration for tasks (Cloudlets).
-     * Extends ConfigAbstract and includes parameters like file size, output size, PEs, and length.
+     * Nested class representing the configuration for tasks (Cloudlets). Extends ConfigAbstract and
+     * includes parameters like file size, output size, PEs, and length.
      */
     public static class TasksConfig extends ConfigAbstract {
         // List of input file sizes for the tasks

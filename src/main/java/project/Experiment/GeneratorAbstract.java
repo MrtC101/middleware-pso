@@ -1,4 +1,5 @@
 package project.Experiment;
+
 @Deprecated
 public abstract class GeneratorAbstract<T> implements Generator<T> {
     protected int min;

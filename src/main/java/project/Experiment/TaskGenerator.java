@@ -8,8 +8,9 @@ import org.cloudsimplus.cloudlets.CloudletSimple;
 import project.Utils.RandomUtils;
 
 /**
- * TaskGenerator class generates Cloudlets (tasks) based on the provided configuration.
- * It supports both homogeneous and heterogeneous task configurations, with random variations in certain parameters.
+ * TaskGenerator class generates Cloudlets (tasks) based on the provided configuration. It supports
+ * both homogeneous and heterogeneous task configurations, with random variations in certain
+ * parameters.
  */
 public class TaskGenerator implements Generator<Cloudlet> {
 
@@ -18,7 +19,7 @@ public class TaskGenerator implements Generator<Cloudlet> {
 
     private int seed;
 
-     // Multipliers for generating random values for various task parameters
+    // Multipliers for generating random values for various task parameters
     int T_FILESIZE_MULT = 1000;
     int T_OUTSIZE_MULT = 1000;
     int T_LENGTH_MULT = 512;
@@ -54,7 +55,7 @@ public class TaskGenerator implements Generator<Cloudlet> {
      * @param length The length or number of instructions for the task
      * @return A new Cloudlet object with the specified configuration
      */
-    private Cloudlet createCloudlet(int fileSize, int outputSize, int pesNumber, int length){
+    private Cloudlet createCloudlet(int fileSize, int outputSize, int pesNumber, int length) {
         CloudletSimple cloudlet;
         cloudlet = new CloudletSimple(length, pesNumber);
         cloudlet.setFileSize(fileSize);
@@ -69,23 +70,25 @@ public class TaskGenerator implements Generator<Cloudlet> {
      * @return A list of generated Cloudlets
      */
     @Override
-    public ArrayList<Cloudlet> generate(){
+    public ArrayList<Cloudlet> generate() {
 
         // Generate a random (or not) number of tasks
-        int tasks = RandomUtils.randomIntMultiple(tasksConfig.size, 1); 
+        int tasks = RandomUtils.randomIntMultiple(tasksConfig.size, 1);
         int fileSize, outputSize, pesNumber, length;
 
         // Initialize the task list with the specified size
-        ArrayList<Cloudlet> taskList = new ArrayList<>(tasks); 
+        ArrayList<Cloudlet> taskList = new ArrayList<>(tasks);
 
-        // If the task configuration is heterogeneous, generate random (or not) values for each parameter
-        if (tasksConfig.heterogeneous){
+        // If the task configuration is heterogeneous, generate random (or not) values for each
+        // parameter
+        if (tasksConfig.heterogeneous) {
             fileSize = RandomUtils.randomIntMultiple(tasksConfig.fileSize, T_FILESIZE_MULT);
             outputSize = RandomUtils.randomIntMultiple(tasksConfig.outputSize, T_OUTSIZE_MULT);
             pesNumber = RandomUtils.randomIntMultiple(tasksConfig.pesNumber, T_PES_MULT);
             length = RandomUtils.randomIntMultiple(tasksConfig.length, T_LENGTH_MULT);
 
-            // If the task configuration is heterogeneous, generate random (or not) values for each parameter
+            // If the task configuration is heterogeneous, generate random (or not) values for each
+            // parameter
             for (int i = 0; i < tasks; i++) {
                 taskList.add(createCloudlet(fileSize, outputSize, pesNumber, length));
             }
@@ -101,6 +104,6 @@ public class TaskGenerator implements Generator<Cloudlet> {
                 taskList.add(createCloudlet(fileSize, outputSize, pesNumber, length));
             }
         }
-        return taskList; // Return the generated task list   
+        return taskList; // Return the generated task list
     }
 }

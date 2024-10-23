@@ -22,6 +22,7 @@ public class DatacenterBrokerPSO extends DatacenterBrokerSimple {
 
     /**
      * Creates a DatacenterBroker that uses PSO for CloudletAllocation.
+     * 
      * @param simulation {@inheritDoc}
      */
     public DatacenterBrokerPSO(CloudSimPlus simulation) {
@@ -99,11 +100,12 @@ public class DatacenterBrokerPSO extends DatacenterBrokerSimple {
         System.out.println(String.format("Fittness: %f", best_particle.getBestFitness()));
         String str = "Best position: \n[ ";
         double[] position = best_particle.getBestPosition();
-        for (int i = 0; i < position.length; i++) str += Math.round(position[i]) + " ";
+        for (int i = 0; i < position.length; i++)
+            str += Math.round(position[i]) + " ";
         str += "]\n";
         System.out.println(str);
     }
-    
+
 
     /**
      * For debuggin purpose.
@@ -118,6 +120,6 @@ public class DatacenterBrokerPSO extends DatacenterBrokerSimple {
         a.submitCloudletList(new ArrayList<Cloudlet>());
         a.runPSO(20, 500, 1, 2, 2);
     }
-    
+
 }
 

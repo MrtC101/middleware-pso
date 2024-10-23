@@ -3,8 +3,8 @@ package project.Experiment;
 import java.util.ArrayList;
 
 /**
- * Abstract class extending ConfigAbstract, representing a machine configuration.
- * It defines the resource configurations common to machines like RAM, storage, bandwidth, PEs, and MIPS.
+ * Abstract class extending ConfigAbstract, representing a machine configuration. It defines the
+ * resource configurations common to machines like RAM, storage, bandwidth, PEs, and MIPS.
  */
 public abstract class MachineConfigAbstract extends ConfigAbstract {
     // RAM sizes in MB for the machines

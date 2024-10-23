@@ -15,8 +15,8 @@ import org.cloudsimplus.vms.Vm;
 import project.PSO.DatacenterBrokerPSO;
 
 /**
- * SimGenerator class handles the creation and execution of the CloudSimPlus
- * simulation, including generating tasks, VMs, hosts.
+ * SimGenerator class handles the creation and execution of the CloudSimPlus simulation, including
+ * generating tasks, VMs, hosts.
  */
 
 public class SimGenerator {
@@ -27,10 +27,10 @@ public class SimGenerator {
 
     // List of brokers participating in the simulation
     private ArrayList<DatacenterBroker> brokers;
-    
+
     /**
-     * Constructor initializes the generators using the configuration settings passed
-     * via the DatacenterConfig object.
+     * Constructor initializes the generators using the configuration settings passed via the
+     * DatacenterConfig object.
      * 
      * @param datacenterConfig Configuration object containing tasks, VMs, and hosts definitions
      */
@@ -58,13 +58,13 @@ public class SimGenerator {
         Datacenter datacenter = new DatacenterSimple(simulation, hostList);
 
         // Generate tasks (cloudlets) and VMs for the simulation
-        ArrayList<Cloudlet> taskList =  taskGenerator.generate();
+        ArrayList<Cloudlet> taskList = taskGenerator.generate();
         ArrayList<Vm> vmList = vmGenerator.generate();
-        
+
         // Submit VMs and tasks to each broker
         for (DatacenterBroker broker : brokers) {
             broker.submitVmList(vmList); // Submit VM list to the broker
-            broker.submitCloudletList(taskList); // Submit task (cloudlet) list to the broker 
+            broker.submitCloudletList(taskList); // Submit task (cloudlet) list to the broker
             // If the broker is an instance of DatacenterBrokerPSO, run the PSO algorithm
             if (broker instanceof DatacenterBrokerPSO) {
                 ((DatacenterBrokerPSO) (broker)).runPSO(100, 100, 1, 3, 10);
@@ -79,7 +79,8 @@ public class SimGenerator {
         for (DatacenterBroker broker : brokers) {
             cloudletFinishedList = broker.getCloudletFinishedList(); // Get completed cloudlets
             System.out.println(broker); // Print broker information
-            new CloudletsTableBuilder(cloudletFinishedList).build(); // Display finished cloudlets in a table
+            new CloudletsTableBuilder(cloudletFinishedList).build(); // Display finished cloudlets
+                                                                     // in a table
         }
     }
 }
