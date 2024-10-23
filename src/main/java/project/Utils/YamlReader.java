@@ -1,9 +1,13 @@
 package project.Utils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -49,5 +53,49 @@ public class YamlReader {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static DatacenterConfig readConfig(String costFile, String hostsFile, String vmsFile, String tasksFile) {
+        // Loader options allow customization of YAML parsing behavior
+        LoaderOptions loaderOptions = new LoaderOptions();
+        
+        // Constructor is used to create instances of DatacenterConfig based on YAML input
+        Constructor constructor = new Constructor(DatacenterConfig.class, loaderOptions);
+        
+        // Yaml object that performs the actual YAML parsing
+        Yaml yaml = new Yaml(constructor);
+        
+        try {
+            String combinedYaml = combineYamlFiles(costFile, hostsFile, vmsFile, tasksFile);
+            InputStream inputStream = new ByteArrayInputStream(combinedYaml.getBytes());
+            DatacenterConfig datacenterConfig = yaml.load(inputStream);
+            return datacenterConfig;
+        } catch (IOException e) {
+
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static String combineYamlFiles(String costFile, String hostsFile, String vmsFile, String tasksFile) throws IOException {
+        StringBuilder combinedContent = new StringBuilder();
+
+        // Leer y agregar contenido del archivo cost.yaml
+        combinedContent.append(Files.readString(Paths.get(costFile)))
+                       .append("\n\n");
+
+        // Leer y agregar contenido del archivo hostsConfig.yaml
+        combinedContent.append(Files.readString(Paths.get(hostsFile)))
+                       .append("\n\n");
+
+        // Leer y agregar contenido del archivo vmsConfig.yaml
+        combinedContent.append(Files.readString(Paths.get(vmsFile)))
+                       .append("\n\n");
+
+        // Leer y agregar contenido del archivo tasksConfig.yaml
+        combinedContent.append(Files.readString(Paths.get(tasksFile)))
+                       .append("\n");
+
+        return combinedContent.toString();
     }
 }
