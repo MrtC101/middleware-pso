@@ -18,7 +18,7 @@ import project.PSO.DatacenterBrokerPSO;
  * SimGenerator class handles the creation and execution of the CloudSimPlus simulation, including
  * generating tasks, VMs, hosts.
  */
-
+@Deprecated
 public class SimGenerator {
     // Task, VM, and Host generators for creating the necessary simulation components
     private TaskGenerator taskGenerator;

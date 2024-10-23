@@ -9,7 +9,6 @@ import org.cloudsimplus.brokers.DatacenterBrokerHeuristic;
 import org.cloudsimplus.brokers.DatacenterBrokerSimple;
 import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
 import org.cloudsimplus.cloudlets.Cloudlet;
-import org.cloudsimplus.cloudlets.CloudletSimple;
 import org.cloudsimplus.core.CloudSimPlus;
 import org.cloudsimplus.distributions.UniformDistr;
 import org.cloudsimplus.datacenters.DatacenterSimple;
@@ -17,7 +16,6 @@ import org.cloudsimplus.heuristics.CloudletToVmMappingSimulatedAnnealing;
 import org.cloudsimplus.util.Log;
 import org.cloudsimplus.hosts.Host;
 import org.cloudsimplus.vms.Vm;
-import org.cloudsimplus.vms.VmSimple;
 import project.Experiment.Configurations.DatacenterConfig;
 import project.Experiment.Generators.HostGenerator;
 import project.Experiment.Generators.TaskGenerator;
@@ -25,22 +23,21 @@ import project.Experiment.Generators.VMGenerator;
 import project.PSO.DatacenterBrokerPSO;
 import project.Utils.CSVWriter;
 
-
-public class Simulation {
+/**
+ * Simulation to compare three balancers policies.
+ */
+public class ComparativeSimulation {
     private CloudletToVmMappingSimulatedAnnealing heuristic;
 
     private TaskGenerator taskGenerator;
     private VMGenerator vmGenerator;
     private HostGenerator hostGenerator;
 
-    public Simulation(DatacenterConfig datacenterConfig) {
+    public ComparativeSimulation(DatacenterConfig datacenterConfig) {
         this.taskGenerator = new TaskGenerator(datacenterConfig.tasks);
         this.vmGenerator = new VMGenerator(datacenterConfig.vms);
         this.hostGenerator = new HostGenerator(datacenterConfig.hosts);
     }
-
-    // Lista de brokers
-    private ArrayList<DatacenterBroker> brokers;
 
     public void runSimulation() {
         Log.setLevel(Level.INFO);

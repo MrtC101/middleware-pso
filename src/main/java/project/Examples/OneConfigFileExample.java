@@ -16,10 +16,7 @@ public class OneConfigFileExample {
         // Leer configuración desde archivo YAML usando YamlReader
         DatacenterConfig datacenterConfig = YamlReader.readConfig(configFilePath);
 
-        // Instanciar la simulación con la configuración del datacenter
-        Simulation simulation = new Simulation(datacenterConfig);
-
         // Ejecutar la simulación
-        simulation.runSimulation();
+        (new Simulation(datacenterConfig)).runSimulation();
     }
 }
