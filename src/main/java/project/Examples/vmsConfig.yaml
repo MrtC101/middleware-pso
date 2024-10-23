@@ -1,0 +1,17 @@
+vms:
+  - size: [10]
+    heterogeneous: false
+    ram: [4098]
+    storage: [50000]
+    bw: [5000]
+    pesNumber: [2]
+    mips: [500]
+    taskScheduler: 0
+  - size: [5]
+    heterogeneous: false
+    ram: [1024]
+    storage: [20000]
+    bw: [2000]
+    pesNumber: [4]
+    mips: [1000]
+    taskScheduler: 0 

@@ -1,0 +1,7 @@
+tasks:
+  size: [1000, 5000]
+  heterogeneous: true
+  fileSize: [1000, 2000]
+  outputSize: [500, 1000]
+  pesNumber: [1, 2]
+  length: [10000, 15000]

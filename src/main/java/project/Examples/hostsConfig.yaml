@@ -1,0 +1,9 @@
+hosts:
+  - size: [10]
+    heterogeneous: false
+    ram: [16384]
+    storage: [2000000]
+    bw: [20000]
+    pesNumber: [16]
+    mips: [10000]
+    vmScheduler: 0 

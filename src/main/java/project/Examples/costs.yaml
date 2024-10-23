@@ -1,0 +1,4 @@
+costPerSec: 0.05
+costPerMem: 0.01
+costPerStorage: 0.001
+costPerBw: 0.002
