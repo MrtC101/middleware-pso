@@ -1,8 +1,0 @@
-datacenter:
-  heterogeneous: False
-  hosts_num: 0
-  
-cloudlets:
-
-vms:
-

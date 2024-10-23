@@ -21,6 +21,14 @@ public class DatacenterBrokerPSO extends DatacenterBrokerSimple {
     private Map<Cloudlet, Vm> precomputedMapping;
 
     /**
+     * Creates a DatacenterBroker that uses PSO for CloudletAllocation.
+     * @param simulation {@inheritDoc}
+     */
+    public DatacenterBrokerPSO(CloudSimPlus simulation) {
+        this(simulation, "");
+    }
+
+    /**
      * {@inheritDoc} Creates a DatacenterBroker that uses PSO for CloudletAllocation.
      * 
      * @param simulation {@inheritDoc}
@@ -82,12 +90,20 @@ public class DatacenterBrokerPSO extends DatacenterBrokerSimple {
         }
         PSOParticle bestParticle = (PSOParticle) swarm.getBestParticle();
 
-        System.out.println("The best fitness value: " + swarm.getBestFitness());
-        System.out.println("The best solution is: ");
-        System.out.println(bestParticle);
-
         this.precomputedMapping = bestParticle.mapCloudletsToVms(cloudlets, vms);
+        printResult(bestParticle);
+
     }
+
+    private void printResult(PSOParticle best_particle) {
+        System.out.println(String.format("Fittness: %f", best_particle.getBestFitness()));
+        String str = "Best position: \n[ ";
+        double[] position = best_particle.getBestPosition();
+        for (int i = 0; i < position.length; i++) str += Math.round(position[i]) + " ";
+        str += "]\n";
+        System.out.println(str);
+    }
+    
 
     /**
      * For debuggin purpose.

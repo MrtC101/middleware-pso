@@ -40,7 +40,7 @@ public class PSOParticle extends Particle {
      */
     public Map<Cloudlet, Vm> mapCloudletsToVms(List<Cloudlet> cloudletList, List<Vm> vmList) {
         Map<Cloudlet, Vm> cloudletToVmMap = new HashMap<Cloudlet, Vm>();
-        double[] particlePositions = this.getPosition();
+        double[] particlePositions = this.getBestPosition();
 
         // Validación de tamaños
         if (particlePositions.length != cloudletList.size()) {
@@ -49,7 +49,7 @@ public class PSOParticle extends Particle {
         }
 
         for (int cloudletIndex = 0; cloudletIndex < cloudletList.size(); cloudletIndex++) {
-            int vmIndex = (int) particlePositions[cloudletIndex];
+            int vmIndex = (int) Math.round(particlePositions[cloudletIndex]);
 
             // Validación de índices de VM
             if (vmIndex >= vmList.size()) {

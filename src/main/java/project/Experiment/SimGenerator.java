@@ -67,7 +67,7 @@ public class SimGenerator {
             broker.submitCloudletList(taskList); // Submit task (cloudlet) list to the broker 
             // If the broker is an instance of DatacenterBrokerPSO, run the PSO algorithm
             if (broker instanceof DatacenterBrokerPSO) {
-                ((DatacenterBrokerPSO) (broker)).runPSO(10, 50, 1, 1, 1);
+                ((DatacenterBrokerPSO) (broker)).runPSO(100, 100, 1, 3, 10);
             }
         }
 
