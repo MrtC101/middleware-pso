@@ -7,9 +7,7 @@ import ch.qos.logback.classic.Level;
 import org.cloudsimplus.brokers.DatacenterBroker;
 import org.cloudsimplus.brokers.DatacenterBrokerHeuristic;
 import org.cloudsimplus.brokers.DatacenterBrokerSimple;
-import org.cloudsimplus.builders.tables.CloudletsTableBuilder;
 import org.cloudsimplus.cloudlets.Cloudlet;
-import org.cloudsimplus.cloudlets.CloudletSimple;
 import org.cloudsimplus.core.CloudSimPlus;
 import org.cloudsimplus.distributions.UniformDistr;
 import org.cloudsimplus.datacenters.DatacenterSimple;
@@ -17,7 +15,6 @@ import org.cloudsimplus.heuristics.CloudletToVmMappingSimulatedAnnealing;
 import org.cloudsimplus.util.Log;
 import org.cloudsimplus.hosts.Host;
 import org.cloudsimplus.vms.Vm;
-import org.cloudsimplus.vms.VmSimple;
 import project.Experiment.Configurations.DatacenterConfig;
 import project.Experiment.Generators.HostGenerator;
 import project.Experiment.Generators.TaskGenerator;
@@ -33,10 +30,18 @@ public class Simulation {
     private VMGenerator vmGenerator;
     private HostGenerator hostGenerator;
 
+    private List<String[]> cloudletData = new ArrayList<>();
+    private List<String[]> vmData = new ArrayList<>();
+
     public Simulation(DatacenterConfig datacenterConfig) {
         this.taskGenerator = new TaskGenerator(datacenterConfig.tasks);
         this.vmGenerator = new VMGenerator(datacenterConfig.vms);
         this.hostGenerator = new HostGenerator(datacenterConfig.hosts);
+
+        // Agregar cabecera para cloudletData
+        cloudletData.add(new String[]{"Broker", "Cloudlet ID", "Execution Time", "Start Time", "Finish Time", "VM ID", "CPU Utilization"});
+        // Agregar cabecera para vmData
+        vmData.add(new String[]{"Broker", "VM ID", "Total Execution Time"});
     }
 
     // Lista de brokers
@@ -44,18 +49,14 @@ public class Simulation {
 
     public void runSimulation() {
         Log.setLevel(Level.INFO);
-
-        // Crear brokers para las diferentes políticas
+    
         final DatacenterBrokerPSO brokerPSO = new DatacenterBrokerPSO(new CloudSimPlus(), "");
         final DatacenterBrokerSimple brokerSimple = new DatacenterBrokerSimple(new CloudSimPlus());
-        final DatacenterBrokerHeuristic brokerHeuristic =
-                new DatacenterBrokerHeuristic(new CloudSimPlus());
-
-        // Crea la heurística de SimulatedAnnealing y se la setea al broker
+        final DatacenterBrokerHeuristic brokerHeuristic = new DatacenterBrokerHeuristic(new CloudSimPlus());
+    
         createSimulatedAnnealingHeuristic();
         brokerHeuristic.setHeuristic(heuristic);
 
-        // Generar las tareas (cloudlets) y VMs
         ArrayList<Cloudlet> taskList1 = taskGenerator.generate();
         ArrayList<Vm> vmList1 = vmGenerator.generate();
 
@@ -64,72 +65,78 @@ public class Simulation {
 
         ArrayList<Cloudlet> taskList3 = taskGenerator.generate();
         ArrayList<Vm> vmList3 = vmGenerator.generate();
-
+    
         // Ejecutar simulaciones secuenciales
         executeBrokerSimulation(brokerSimple, taskList1, vmList1);
         executeBrokerSimulation(brokerPSO, taskList2, vmList2);
         executeBrokerSimulation(brokerHeuristic, taskList3, vmList3);
+        
+        // Exportar los resultados después de todas las simulaciones
+        exportCloudletResultsToCSV("combined_cloudlets_results.csv");
+        exportVMResultsToCSV("combined_vms_results.csv");
     }
-
-    private void executeBrokerSimulation(DatacenterBroker broker, ArrayList<Cloudlet> taskList,
-            ArrayList<Vm> vmList) {
-        // Generar hosts y crear un datacenter simple
+    
+    private void executeBrokerSimulation(DatacenterBroker broker, ArrayList<Cloudlet> taskList, ArrayList<Vm> vmList) {
         ArrayList<Host> hostList = hostGenerator.generate();
         new DatacenterSimple(broker.getSimulation(), hostList);
-
-        // Asignar VMs y Cloudlets al broker
+    
         broker.submitVmList(vmList);
         broker.submitCloudletList(taskList);
-
+    
         if (broker instanceof DatacenterBrokerPSO) {
-            ((DatacenterBrokerPSO) (broker)).runPSO(100, 1000, 0.9, 2.0, 2.0,false);
+            ((DatacenterBrokerPSO) (broker)).runPSO(20, 500, 1, 2, 2, false);
         }
-
-        // Ejecutar simulación
+    
         long startTime = System.currentTimeMillis();
         broker.getSimulation().start();
         long endTime = System.currentTimeMillis();
-
-        // Recoger resultados
+    
         List<Cloudlet> cloudletFinishedList = broker.getCloudletFinishedList();
         long executionTime = endTime - startTime;
-        System.out.println("Broker: " + broker.getClass().getSimpleName() + " Execution time: "
-                + executionTime);
+        System.out.println("Broker: " + broker.getClass().getSimpleName() + " Execution time: " + executionTime);
+    
+        collectCloudletData(broker, cloudletFinishedList);
+        collectVMData(broker, vmList);
+    }
 
-        // Mostrar resultados
-        new CloudletsTableBuilder(cloudletFinishedList).build();
+    private void collectCloudletData(DatacenterBroker broker, List<Cloudlet> cloudletFinishedList) {
+        for (Cloudlet cloudlet : cloudletFinishedList) {
+            Vm vm = cloudlet.getVm();
+            double cpuUtilization = vm.getCpuPercentUtilization(cloudlet.getActualCpuTime());
+            cloudletData.add(new String[]{
+                broker.getClass().getSimpleName(),
+                String.valueOf(cloudlet.getId()),
+                String.valueOf(cloudlet.getActualCpuTime()),
+                String.valueOf(cloudlet.getExecStartTime()),
+                String.valueOf(cloudlet.getFinishTime()),
+                String.valueOf(vm.getId()),
+                String.valueOf(cpuUtilization)
+            });
+        }
+    }
 
-        // Guardar en CSV
-        exportResultsToCSV(broker.getClass().getSimpleName(), cloudletFinishedList, executionTime);
+    private void collectVMData(DatacenterBroker broker, ArrayList<Vm> vmList) {
+        for (Vm vm : vmList) {
+            vmData.add(new String[]{
+                broker.getClass().getSimpleName(),
+                String.valueOf(vm.getId()),
+                String.valueOf(vm.getTotalExecutionTime())
+            });
+        }
     }
 
     private void createSimulatedAnnealingHeuristic() {
-        heuristic = new CloudletToVmMappingSimulatedAnnealing(1.0, new UniformDistr(0, 1));
-        heuristic.setColdTemperature(0.0001);
-        heuristic.setCoolingRate(0.003);
+		heuristic = new CloudletToVmMappingSimulatedAnnealing(1.0, new UniformDistr(0, 1));
+		heuristic.setColdTemperature(0.0001);
+		heuristic.setCoolingRate(0.003);
         heuristic.setSearchesByIteration(20);
+	}
+
+    public void exportCloudletResultsToCSV(String fileName) {
+        CSVWriter.writeCSV(fileName, cloudletData);
     }
 
-    public void exportResultsToCSV(String brokerName, List<Cloudlet> cloudletFinishedList,
-            long executionTime) {
-        List<String[]> data = new ArrayList<>();
-
-        // Agregar cabeceras
-        data.add(new String[] {"Broker", "Cloudlet ID", "Execution Time", "Start Time",
-                "Finish Time"});
-
-        // Agregar resultados de cada Cloudlet
-        for (Cloudlet cloudlet : cloudletFinishedList) {
-            data.add(new String[] {brokerName, String.valueOf(cloudlet.getId()),
-                    String.valueOf(cloudlet.getActualCpuTime()),
-                    String.valueOf(cloudlet.getExecStartTime()),
-                    String.valueOf(cloudlet.getFinishTime())});
-        }
-
-        // Agregar tiempo total de ejecución
-        data.add(new String[] {"Total Execution Time", String.valueOf(executionTime)});
-
-        // Exportar a CSV
-        CSVWriter.writeCSV("src/main/java/resources/results/DatacenterBrokesResults.csv", data);
+    public void exportVMResultsToCSV(String fileName) {
+        CSVWriter.writeCSV(fileName, vmData);
     }
 }
