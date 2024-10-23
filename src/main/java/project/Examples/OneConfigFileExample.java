@@ -1,6 +1,6 @@
 package project.Examples;
 
-import project.Experiment.Simulation;
+import project.Experiment.ComparativeSimulation;
 import project.Experiment.Configurations.DatacenterConfig;
 import project.Utils.YamlReader;
 
@@ -17,6 +17,6 @@ public class OneConfigFileExample {
         DatacenterConfig datacenterConfig = YamlReader.readConfig(configFilePath);
 
         // Ejecutar la simulación
-        (new Simulation(datacenterConfig)).runSimulation();
+        (new ComparativeSimulation(datacenterConfig)).runSimulation();
     }
 }

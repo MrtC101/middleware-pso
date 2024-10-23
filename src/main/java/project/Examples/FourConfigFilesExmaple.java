@@ -1,8 +1,7 @@
 package project.Examples;
 
-import project.Experiment.Simulation;
+import project.Experiment.ComparativeSimulation;
 import project.Experiment.Configurations.DatacenterConfig;
-import project.Experiment.Generators.SimGenerator;
 import project.Utils.YamlReader;
 
 /**
@@ -24,6 +23,6 @@ public class FourConfigFilesExmaple {
         String vmsFile = configFolderPath.concat("/vmsConfig.yaml");
         String tasksFile = configFolderPath.concat("/tasksConfig.yaml");
         DatacenterConfig datacenterConfig = YamlReader.readConfig(costsFile, hostsFile, vmsFile, tasksFile);
-        (new SimGenerator(datacenterConfig)).generateSimulation();
+        (new ComparativeSimulation(datacenterConfig)).runSimulation();
     }
 }
