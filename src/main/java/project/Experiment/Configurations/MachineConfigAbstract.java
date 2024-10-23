@@ -1,4 +1,4 @@
-package project.Experiment;
+package project.Experiment.Configurations;
 
 import java.util.ArrayList;
 

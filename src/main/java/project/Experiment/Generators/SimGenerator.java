@@ -1,4 +1,4 @@
-package project.Experiment;
+package project.Experiment.Generators;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.cloudsimplus.datacenters.Datacenter;
 import org.cloudsimplus.datacenters.DatacenterSimple;
 import org.cloudsimplus.hosts.Host;
 import org.cloudsimplus.vms.Vm;
-
+import project.Experiment.Configurations.DatacenterConfig;
 import project.PSO.DatacenterBrokerPSO;
 
 /**
@@ -50,7 +50,7 @@ public class SimGenerator {
 
         // Initialize brokers list and create a PSO broker
         ArrayList<DatacenterBroker> brokers = new ArrayList<>();
-        final DatacenterBrokerPSO broker0 = new DatacenterBrokerPSO(simulation, "");
+        final DatacenterBrokerPSO broker0 = new DatacenterBrokerPSO(simulation);
         brokers.add(broker0); // Add broker to the list
 
         // Generate hosts and create a simple datacenter
@@ -67,7 +67,7 @@ public class SimGenerator {
             broker.submitCloudletList(taskList); // Submit task (cloudlet) list to the broker
             // If the broker is an instance of DatacenterBrokerPSO, run the PSO algorithm
             if (broker instanceof DatacenterBrokerPSO) {
-                ((DatacenterBrokerPSO) (broker)).runPSO(100, 100, 1, 3, 10);
+                ((DatacenterBrokerPSO) (broker)).runPSO(100, 1000, 0.9, 2.0, 2.0,false);
             }
         }
 

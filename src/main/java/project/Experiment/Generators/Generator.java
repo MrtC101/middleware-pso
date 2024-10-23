@@ -1,4 +1,4 @@
-package project.Experiment;
+package project.Experiment.Generators;
 
 import java.util.ArrayList;
 

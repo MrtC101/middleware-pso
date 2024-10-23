@@ -18,8 +18,10 @@ import org.cloudsimplus.util.Log;
 import org.cloudsimplus.hosts.Host;
 import org.cloudsimplus.vms.Vm;
 import org.cloudsimplus.vms.VmSimple;
-
-
+import project.Experiment.Configurations.DatacenterConfig;
+import project.Experiment.Generators.HostGenerator;
+import project.Experiment.Generators.TaskGenerator;
+import project.Experiment.Generators.VMGenerator;
 import project.PSO.DatacenterBrokerPSO;
 import project.Utils.CSVWriter;
 
@@ -80,7 +82,7 @@ public class Simulation {
         broker.submitCloudletList(taskList);
 
         if (broker instanceof DatacenterBrokerPSO) {
-            ((DatacenterBrokerPSO) (broker)).runPSO(20, 500, 1, 2, 2);
+            ((DatacenterBrokerPSO) (broker)).runPSO(100, 1000, 0.9, 2.0, 2.0,false);
         }
 
         // Ejecutar simulación

@@ -15,8 +15,8 @@ import org.cloudsimplus.schedulers.vm.VmSchedulerSpaceShared;
 import org.cloudsimplus.schedulers.vm.VmSchedulerTimeShared;
 import org.cloudsimplus.vms.Vm;
 import org.cloudsimplus.vms.VmSimple;
-import project.Experiment.HostGenerator;
-import project.Experiment.VMGenerator;
+import project.Experiment.Generators.HostGenerator;
+import project.Experiment.Generators.VMGenerator;
 import project.PSO.DatacenterBrokerPSO;
 
 /**
@@ -169,6 +169,6 @@ public class RunPSOExample {
                 broker.submitCloudletList(cloudlets);
                 // Parameters set based on
                 // https://ewh.ieee.org/conf/wcci/2016/document/tutorials/cec4.pdf
-                broker.runPSO(100, 1000, 0.9, 2.0, 2.0);
+                broker.runPSO(100, 1000, 0.9, 2.0, 2.0,true);
         }
 }

@@ -1,7 +1,7 @@
 package project.Examples;
 
-import project.Experiment.DatacenterConfig;
-import project.Experiment.SimGenerator;
+import project.Experiment.Configurations.DatacenterConfig;
+import project.Experiment.Generators.SimGenerator;
 import project.Utils.YamlReader;
 
 /**

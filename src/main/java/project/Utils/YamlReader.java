@@ -12,8 +12,7 @@ import java.nio.file.Paths;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
-
-import project.Experiment.DatacenterConfig;
+import project.Experiment.Configurations.DatacenterConfig;
 
 /**
  * Utility class for reading YAML configuration files and mapping the contents

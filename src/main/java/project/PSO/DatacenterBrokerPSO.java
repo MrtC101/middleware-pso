@@ -66,7 +66,7 @@ public class DatacenterBrokerPSO extends DatacenterBrokerSimple {
      * @param C2 Social coefficient, which represents the particle's tendency to move towards the
      *        swarm's best-known position.
      */
-    public void runPSO(int popSize, int iterations, double W, double C1, double C2) {
+    public void runPSO(int popSize, int iterations, double W, double C1, double C2, boolean print) {
 
         // Variable Declaration
         ArrayList<Cloudlet> cloudlets = (ArrayList<Cloudlet>) this.getCloudletWaitingList();
@@ -92,10 +92,16 @@ public class DatacenterBrokerPSO extends DatacenterBrokerSimple {
         PSOParticle bestParticle = (PSOParticle) swarm.getBestParticle();
 
         this.precomputedMapping = bestParticle.mapCloudletsToVms(cloudlets, vms);
-        printResult(bestParticle);
-
+        if (print) {
+            printResult(bestParticle);
+        }
     }
 
+    /**
+     * Prints the corresponding id of the VM assigned to each cloudlet in the best solution.
+     * 
+     * @param best_particle
+     */
     private void printResult(PSOParticle best_particle) {
         System.out.println(String.format("Fittness: %f", best_particle.getBestFitness()));
         String str = "Best position: \n[ ";
@@ -118,7 +124,7 @@ public class DatacenterBrokerPSO extends DatacenterBrokerSimple {
         DatacenterBrokerPSO a = new DatacenterBrokerPSO(simulation, "");
         a.submitVmList(new ArrayList<Vm>());
         a.submitCloudletList(new ArrayList<Cloudlet>());
-        a.runPSO(20, 500, 1, 2, 2);
+        a.runPSO(100, 1000, 0.9, 2.0, 2.0,true);
     }
 
 }
