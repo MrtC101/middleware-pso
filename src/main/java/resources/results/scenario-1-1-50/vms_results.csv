@@ -1,0 +1,4 @@
+Broker,VM ID,VM Load,Total Execution Time
+DatacenterBrokerSimple,0,1,616
+DatacenterBrokerPSO,0,1,616
+DatacenterBrokerHeuristic,0,1,616

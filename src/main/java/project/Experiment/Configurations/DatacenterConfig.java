@@ -8,6 +8,8 @@ import java.util.ArrayList;
  * TasksConfig.
  */
 public class DatacenterConfig {
+
+
     // Cost per second of computation resources in the datacenter
     public double costPerSec;
 
@@ -45,6 +47,7 @@ public class DatacenterConfig {
     public static class VmConfig extends MachineConfigAbstract {
         // Task Scheduler options: TIMESHARED = 0, SPACESHARED = 1, COMPLETELYFAIR = 2
         public int taskScheduler;
+        public int number;
     }
 
     /**
@@ -63,5 +66,9 @@ public class DatacenterConfig {
 
         // List of task lengths (instruction counts)
         public ArrayList<Integer> length;
+
+        public int number;
     }
+
+    
 }

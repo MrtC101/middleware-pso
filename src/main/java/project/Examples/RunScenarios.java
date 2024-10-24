@@ -2,6 +2,7 @@ package project.Examples;
 
 import project.Experiment.ComparativeSimulation;
 import project.Experiment.Configurations.DatacenterConfig;
+import project.Experiment.Configurations.DatacenterConfig.VmConfig;
 import project.Utils.YamlReader;
 
 public class RunScenarios {
@@ -13,7 +14,7 @@ public class RunScenarios {
         // Ruta del archivo de configuración YAML
         String confPath = "src/main/java/resources/configs/config.yaml";
         String resPath = "src/main/java/resources/results";
-        int seed = 10;
+        //int seed = 10;
         int[] vmsNumbers = {1, 3, 6, 9, 15};
         int[] cloudletsNumber = {25, 50, 100, 150, 200};
         DatacenterConfig datacenterConfig = YamlReader.readConfig(confPath);
@@ -22,11 +23,13 @@ public class RunScenarios {
             for (int cloudN : cloudletsNumber) {
                 //@TODO modificar para que la cantidad d ecloudlets y de maquinas virtuales este separada
                 // de la configuración.
-                datacenterConfig.tasks.size = cloudN;
-                datacenterConfig.vms.size = vmsN;
+                datacenterConfig.tasks.number = cloudN;
+                for(VmConfig vmconf :datacenterConfig.vms){
+                    vmconf.number = vmsN;
+                }
                 ComparativeSimulation sim =
                         new ComparativeSimulation(datacenterConfig);
-                String resultPath = resPath.concat(String.format("scenario-%d", i));
+                String resultPath = resPath.concat(String.format("/scenario-%d-%d-%d", i, vmsN, cloudN));
                 sim.runSimulation(resultPath);
                 i++;
             }

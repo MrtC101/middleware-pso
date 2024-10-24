@@ -20,8 +20,8 @@ import org.cloudsimplus.hosts.Host;
 import org.cloudsimplus.vms.Vm;
 import project.Experiment.Configurations.DatacenterConfig;
 import project.Experiment.Generators.HostGenerator;
-import project.Experiment.Generators.TaskGenerator;
-import project.Experiment.Generators.VMGenerator;
+import project.Experiment.newGenarators.RandomTaskGenerator;
+import project.Experiment.newGenarators.RandomVmGenerator;
 import project.PSO.DatacenterBrokerPSO;
 import project.Utils.CSVWriter;
 
@@ -31,8 +31,8 @@ import project.Utils.CSVWriter;
 public class ComparativeSimulation {
     private CloudletToVmMappingSimulatedAnnealing heuristic;
 
-    private TaskGenerator taskGenerator;
-    private VMGenerator vmGenerator;
+    private RandomTaskGenerator taskGenerator;
+    private RandomVmGenerator vmGenerator;
     private HostGenerator hostGenerator;
 
     private List<String[]> cloudletData = new ArrayList<>();
@@ -40,9 +40,9 @@ public class ComparativeSimulation {
     private ArrayList<String[]> MetricsData = new ArrayList<>();
 
     public ComparativeSimulation(DatacenterConfig datacenterConfig) {
-        this.taskGenerator = new TaskGenerator(datacenterConfig.tasks);
-        this.vmGenerator = new VMGenerator(datacenterConfig.vms);
-        this.hostGenerator = new HostGenerator(datacenterConfig.hosts);
+        this.taskGenerator = new RandomTaskGenerator(datacenterConfig.tasks,10);
+        this.vmGenerator = new RandomVmGenerator(datacenterConfig.vms,10);
+        this.hostGenerator = new HostGenerator(datacenterConfig.hosts,10);
 
         // Header for cloudlets
         cloudletData.add(new String[] {"Broker", "Cloudlet ID", "VM ID", "Execution Time",
@@ -160,7 +160,7 @@ public class ComparativeSimulation {
 
         double makespan = computeMakespan(cloudletFinishedList);
         double cpuUtilization = computeCpuUsage(broker, vmList, cloudletFinishedList);
-        double throughput = vmList.size() / makespan;
+        double throughput = vmList.size() / (double) makespan;
         MetricsData.add(new String[] {brokerName, String.valueOf(df.format(makespan)),
                 String.valueOf(df.format(cpuUtilization)), String.valueOf(df.format(throughput))});
     }
@@ -173,7 +173,8 @@ public class ComparativeSimulation {
      */
     private double computeVMLoad(Vm vm, List<Cloudlet> cloudletList) {
         Map<Long, List<Integer>> Vm2Cloudlet = matchVmsToCloudlets(cloudletList);
-        return Vm2Cloudlet.get(vm.getId()).size() / cloudletList.size();
+        List<Integer> cloudlets = Vm2Cloudlet.get(vm.getId());
+        return cloudlets != null ? (double) cloudlets.size() / (double )cloudletList.size() : 0.0;
     }
 
     /**
@@ -192,11 +193,12 @@ public class ComparativeSimulation {
             // Compute CPU utilization for one VM.
             double totalCpuTime = 0.0;
             double totalTime = broker.getSimulation().clock();
-
-            for (int cloudletId : Vm2Cloudlet.get(vm.getId())) {
-                totalCpuTime += cloudletList.get(cloudletId).getActualCpuTime();
+            List<Integer> cloudlets = Vm2Cloudlet.get(vm.getId());
+            if (cloudlets != null){
+                for (int cloudletId : cloudlets) {
+                    totalCpuTime += cloudletList.get(cloudletId).getActualCpuTime();
+                }
             }
-
             totalCpuUsage += totalTime > 0 ? totalCpuTime / totalTime : 0;
         }
         return totalCpuUsage / vmList.size();

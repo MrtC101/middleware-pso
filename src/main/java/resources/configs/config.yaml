@@ -6,28 +6,28 @@ costPerBw: 0.002
 
 # One host infinite machine
 hosts:
-  pesNumber: [100000]  # Number of PEs
-  mips: [100000]       # Processors speed in mips 
-  ram: [100000]        # RAM in MB
-  storage: [100000]    # Disk in MB
-  bw: [100000]         # Bandwithd in MB
-  vmScheduler: 0       # Timeshared for VMS
-  heterogeneous: False # If heterogeneous or homogeneous
+  - size: [1] 
+    pesNumber: [100000]  # Number of PEs
+    mips: [2000]       # Processors speed in mips 
+    ram: [10240000]        # RAM in MB
+    storage: [10240000]    # Disk in MB
+    bw: [100000]         # Bandwithd in MB
+    vmScheduler: 0       # Timeshared for VMS
+    heterogeneous: False # If heterogeneous or homogeneous
 
+# [a,b] its interpreted as a random value between a an b. 
 # VMs Configuration
 vms:
-  pesNumber: [1,64]      # from 1 to 64 PEs
-  mips: [500,6000]       # 1000 MIPS fijos
-  ram: [2048,16384]      # RAM fija de 2048 MB
-  storage: [100000]      # Almacenamiento fijo de 10000 MB
-  bw: [512]              # Ancho de banda fijo de 1000 Mbps
-  taskScheduler: 1       # SpaceShared
-  heterogeneous: false   # If heterogeneous or homogeneous
+  - pesNumber: [1,12]      # from 1 to 64 PEs
+    mips: [10,400]       # 1000 MIPS fijos
+    ram: [2048,16384]      # RAM fija de 2048 MB
+    storage: [100000]      # Almacenamiento fijo de 10000 MB
+    bw: [512]              # Ancho de banda fijo de 1000 Mbps
+    taskScheduler: 1       # SpaceShared
 
 # Tasks Configuration (Cloudlets)
 tasks:
   pesNumber: [1,12]       # Number of PEs
-  length: [100, 1000]     # Cloudlet length interval in Mips
+  length: [6000, 9000]     # Cloudlet length interval in Mips
   fileSize: [1024, 10240] # Cloudlet File size interval in MBs
   outputSize: [512]       # Size of the output from a cloudlet in MB
-  heterogeneous: True     # If heterogeneous or homogeneous
