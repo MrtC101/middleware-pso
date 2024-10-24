@@ -167,3 +167,35 @@ Defines the cloudlets (tasks) that will be run on the VMs.
     pesNumber: [1, 4]            # Random value between 1 and 4 PEs
     length: [10000, 20000]       # Random value between 10000 and 20000 MI
 ```
+
+## Scenarios
+
+Scenarios to compare Broker polices: RoundRobin - Simulated Annealing -PSO
+| Scenario | VM's Number | Number of Cloudlets |
+|----------|-------------|---------------------|
+| 1        | 1           | 25                  |
+| 2        | 1           | 50                  |
+| 3        | 1           | 100                 |
+| 4        | 1           | 150                 |
+| 5        | 1           | 200                 |
+| 6        | 3           | 25                  |
+| 7        | 3           | 50                  |
+| 8        | 3           | 100                 |
+| 9        | 3           | 150                 |
+| 10       | 3           | 200                 |
+| 11       | 6           | 25                  |
+| 12       | 6           | 50                  |
+| 13       | 6           | 100                 |
+| 14       | 6           | 150                 |
+| 15       | 6           | 200                 |
+| 16       | 9           | 25                  |
+| 17       | 9           | 50                  |
+| 18       | 9           | 100                 |
+| 19       | 9           | 150                 |
+| 20       | 9           | 200                 |
+| 21       | 15          | 25                  |
+| 22       | 15          | 50                  |
+| 23       | 15          | 100                 |
+| 24       | 15          | 150                 |
+| 25       | 15          | 200                 |
+

@@ -1,0 +1,45 @@
+# Datacenter Costs
+costPerSec: 0.05
+costPerMem: 0.01
+costPerStorage: 0.001
+costPerBw: 0.002
+
+# Hosts Configuration
+hosts:
+  - size: [5]                      # Se crearán 10 hosts
+    heterogeneous: true             # Los hosts son heterogéneos
+    ram: [8192]              # RAM fija de 8192Mb
+    storage: [200000]        # Almacenamiento fijo de 200000 MB
+    bw: [5000]                      # Ancho de banda fijo en 5000 Mbps
+    pesNumber: [4]               # PEs 4
+    mips: [15000]            # MIPS fijos de 15000
+    vmScheduler: 0                  # Política de VM: TimeShared
+
+# VMs Configuration
+vms:
+  - size: [8]                      # Se crearán 5 VMs
+    heterogeneous: false            # Las VMs son homogéneas
+    ram: [2048]                     # RAM fija de 2048 MB
+    storage: [10000]         # Almacenamiento fijo de 10000 MB
+    bw: [1000]                      # Ancho de banda fijo de 1000 Mbps
+    pesNumber: [2]                  # 2 PEs fijos
+    mips: [1000]                     # 1000 MIPS fijos
+    taskScheduler: 0                # Política de tareas: TimeShared
+
+
+# Tasks Configuration (Cloudlets)
+tasks:
+  size: [50]                  # Se generarán 50 tareas fijas
+  heterogeneous: false              # Las tareas son homogéneas
+  fileSize: [1000]                  # Tamaño de archivo fijo en 1000 MB
+  outputSize: [500]           # Tamaño de salida fijo de 500 MB
+  pesNumber: [2]                 # PEs fijos
+  length: [10000]            # Longitud de tarea fija de 10000 MI
+
+
+
+#1- Hacer tareas que duren de manera aleatoria diferente tiempo
+#2- Hacer el escenario secuencial
+#4- Ver si se pueden construir los escenarios que hizo el otro grupo.
+
+#Metricas: Makespan, Laod ratio, througput, Desviacióne standar de carga

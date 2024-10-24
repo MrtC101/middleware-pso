@@ -6,22 +6,30 @@ import project.Utils.YamlReader;
 
 public class RunScenarios {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
+        // @TODO Trabajo en progreso, al diea es plantear la ejecución de todos los scenarios aca.
+        // pero tengo que determinar si las maquinas vana ser aleatorias o vana ser preestablecidas.
+
         // Ruta del archivo de configuración YAML
-        String confPath = "src/main/java/resources/configs"; 
+        String confPath = "src/main/java/resources/configs/config.yaml";
         String resPath = "src/main/java/resources/results";
-
-        runScencario(confPath.concat("/sequential.yaml"), resPath.concat("/sequential"));
-        runScencario(confPath.concat("/scenario1.yaml"), resPath.concat("/scenario1"));
-        runScencario(confPath.concat("/scenario2.yaml"), resPath.concat("/scenario2"));
-        runScencario(confPath.concat("/scenario3.yaml"), resPath.concat("/scenario3"));
-        runScencario(confPath.concat("/scenario4.yaml"), resPath.concat("/scenario4"));
-
-    }
-
-    private static void runScencario(String configFilePath, String resultPath) {
-        DatacenterConfig datacenterConfig = YamlReader.readConfig(configFilePath);
-        ComparativeSimulation sim = new ComparativeSimulation(datacenterConfig);
-        sim.runSimulation(resultPath);
+        int seed = 10;
+        int[] vmsNumbers = {1, 3, 6, 9, 15};
+        int[] cloudletsNumber = {25, 50, 100, 150, 200};
+        DatacenterConfig datacenterConfig = YamlReader.readConfig(confPath);
+        int i = 0;
+        for (int vmsN : vmsNumbers) {
+            for (int cloudN : cloudletsNumber) {
+                //@TODO modificar para que la cantidad d ecloudlets y de maquinas virtuales este separada
+                // de la configuración.
+                datacenterConfig.tasks.size = cloudN;
+                datacenterConfig.vms.size = vmsN;
+                ComparativeSimulation sim =
+                        new ComparativeSimulation(datacenterConfig);
+                String resultPath = resPath.concat(String.format("scenario-%d", i));
+                sim.runSimulation(resultPath);
+                i++;
+            }
+        }
     }
 }
