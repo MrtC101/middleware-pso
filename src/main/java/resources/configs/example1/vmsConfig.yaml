@@ -1,10 +1,10 @@
 # VMs Configuration
 vms:
-  - size: [8]                      # Se crearán 5 VMs
+  - size: [1]             # Se crearán 5 VMs
+    pesNumber: [2,8]            # 2 PEs fijos
+    mips: [200]                      # 1000 MIPS fijos
+    ram: [2048,16384]                     # RAM fija de 2048 MB
+    storage: [100000]                # Almacenamiento fijo de 10000 MB
+    bw: [512]                      # Ancho de banda fijo de 1000 Mbps
+    taskScheduler: 1                # Política de tareas: TimeShared
     heterogeneous: false            # Las VMs son homogéneas
-    ram: [2048]                     # RAM fija de 2048 MB
-    storage: [10000]         # Almacenamiento fijo de 10000 MB
-    bw: [1000]                      # Ancho de banda fijo de 1000 Mbps
-    pesNumber: [2]                  # 2 PEs fijos
-    mips: [1000]                     # 1000 MIPS fijos
-    taskScheduler: 0                # Política de tareas: TimeShared

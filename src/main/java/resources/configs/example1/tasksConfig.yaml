@@ -1,7 +1,8 @@
+#
 tasks:
-  size: [50]                  # Se generarán 50 tareas fijas
-  heterogeneous: false              # Las tareas son homogéneas
-  fileSize: [1000]                  # Tamaño de archivo fijo en 1000 MB
-  outputSize: [500]           # Tamaño de salida fijo de 500 MB
-  pesNumber: [2]                 # PEs fijos
-  length: [10000]            # Longitud de tarea fija de 10000 MI
+  size: [10]                 # Se generarán 50 tareas fijas
+  pesNumber: [3]              # PEs fijos
+  length: [10,1000]               # Longitud de tarea fija de 10000 MI
+  fileSize: [200]             # Tamaño de archivo fijo en 1000 MB
+  outputSize: [200]           # Tamaño de salida fijo de 500 MB
+  heterogeneous: True        # Las tareas son homogéneas

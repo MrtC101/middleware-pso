@@ -2,7 +2,6 @@ package project.Utils;
 
 import java.util.ArrayList;
 import java.util.Random;
-
 /**
  * Utility class that provides methods for generating random integers 
  * based on a list of values and a specified multiple.
@@ -41,5 +40,13 @@ public class RandomUtils {
         else {
             throw new IllegalArgumentException("The list must contain either 1 or 2 numbers");
         }
+    }
+
+    // Generar un número aleatorio entre min y max (ambos incluidos)
+    public static int getRandomNumberBetween(ArrayList list) {
+        int min = (int) list.get(0);
+        int max = (int) list.get(1);
+        Random random = new Random();
+        return random.nextInt((max - min) + 1) + min;
     }
 }
