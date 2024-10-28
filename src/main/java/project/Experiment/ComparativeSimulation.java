@@ -40,21 +40,22 @@ public class ComparativeSimulation {
     private ArrayList<String[]> MetricsData = new ArrayList<>();
 
     public ComparativeSimulation(DatacenterConfig datacenterConfig) {
-        this.taskGenerator = new RandomTaskGenerator(datacenterConfig.tasks,10);
-        this.vmGenerator = new RandomVmGenerator(datacenterConfig.vms,10);
-        this.hostGenerator = new HostGenerator(datacenterConfig.hosts,10);
+        this.taskGenerator = new RandomTaskGenerator(datacenterConfig.tasks, 10);
+        this.vmGenerator = new RandomVmGenerator(datacenterConfig.vms, 10);
+        this.hostGenerator = new HostGenerator(datacenterConfig.hosts, 10);
 
         // Header for cloudlets
-        cloudletData.add(new String[] {"Broker", "Cloudlet ID", "VM ID", "Execution Time",
-                "Start Time", "Finish Time"});
+        cloudletData.add(new String[] { "Broker", "Cloudlet ID", "VM ID", "Execution Time",
+                "Start Time", "Finish Time", "CPU Utilization Start", "CPU Utilization Finish" });
         // Header for VMs
-        vmData.add(new String[] {"Broker", "VM ID", "VM Load", "Total Execution Time"});
+        vmData.add(new String[] { "Broker", "VM ID", "VM Load", "Total Execution Time" });
         // Header for Metrics
-        MetricsData.add(new String[] {"Broker", "Maskespan", "Cpu Utilization", "Throughput"});
+        MetricsData.add(new String[] { "Broker", "Maskespan", "Cpu Utilization", "Throughput" });
     }
 
     /**
-     * Runs a simulation for each of each of the three cloudlet load balancer policies RoundRobin,
+     * Runs a simulation for each of each of the three cloudlet load balancer
+     * policies RoundRobin,
      * Simulated Annealing an PSO.
      * 
      * @return Two csv files stored in results
@@ -64,8 +65,7 @@ public class ComparativeSimulation {
 
         final DatacenterBrokerPSO brokerPSO = new DatacenterBrokerPSO(new CloudSimPlus());
         final DatacenterBrokerSimple brokerSimple = new DatacenterBrokerSimple(new CloudSimPlus());
-        final DatacenterBrokerHeuristic brokerHeuristic =
-                new DatacenterBrokerHeuristic(new CloudSimPlus());
+        final DatacenterBrokerHeuristic brokerHeuristic = new DatacenterBrokerHeuristic(new CloudSimPlus());
 
         createSimulatedAnnealingHeuristic();
         brokerHeuristic.setHeuristic(heuristic);
@@ -93,9 +93,10 @@ public class ComparativeSimulation {
     /**
      * Executes the simulation for an specific DatacenterBroker
      * 
-     * @param broker DatacenterBroker that implements the corresponding load balance policy.
+     * @param broker   DatacenterBroker that implements the corresponding load
+     *                 balance policy.
      * @param taskList List of cloudlets to run in the simulation.
-     * @param vmList List of VMs to in the simulation.
+     * @param vmList   List of VMs to in the simulation.
      */
     private void executeBrokerSimulation(DatacenterBroker broker, ArrayList<Cloudlet> taskList,
             ArrayList<Vm> vmList) {
@@ -106,7 +107,8 @@ public class ComparativeSimulation {
         broker.submitCloudletList(taskList);
 
         if (broker instanceof DatacenterBrokerPSO) {
-            ((DatacenterBrokerPSO) (broker)).runPSO(100, 1000, 0.9, 2.0, 2.0, true);;
+            ((DatacenterBrokerPSO) (broker)).runPSO(100, 1000, 0.9, 2.0, 2.0, true);
+            ;
         }
 
         long startTime = System.currentTimeMillis();
@@ -131,38 +133,41 @@ public class ComparativeSimulation {
     }
 
     private void computeMetricsData(DatacenterBroker broker, List<Cloudlet> cloudletFinishedList,
-     ArrayList<Vm> vmList) {
+            ArrayList<Vm> vmList) {
 
         String brokerName = broker.getClass().getSimpleName();
 
         for (Cloudlet cloudlet : cloudletFinishedList) {
-            cloudletData.add(new String[] {brokerName, String.valueOf(cloudlet.getId()),
+            cloudletData.add(new String[] { brokerName, String.valueOf(cloudlet.getId()),
                     String.valueOf(cloudlet.getVm().getId()),
                     String.valueOf(Math.round(cloudlet.getActualCpuTime())),
                     String.valueOf(Math.round(cloudlet.getExecStartTime())),
                     String.valueOf(Math.round(cloudlet.getFinishTime())),
-                });
+                    String.valueOf(Math.round(cloudlet.getUtilizationOfCpu(cloudlet.getExecStartTime()))),
+                    String.valueOf(Math.round(cloudlet.getUtilizationOfCpu(cloudlet.getFinishTime()))),
+            });
         }
 
-        // Crear un objeto DecimalFormatSymbols y establecer el punto como separador decimal
+        // Crear un objeto DecimalFormatSymbols y establecer el punto como separador
+        // decimal
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setDecimalSeparator('.'); // Establecer el punto como separador decimal
         symbols.setGroupingSeparator(','); // Establecer la coma como separador de miles
         DecimalFormat df = new DecimalFormat("#.##", symbols);
-        
+
         for (Vm vm : vmList) {
             double vmLoad = computeVMLoad(vm, cloudletFinishedList);
-            vmData.add(new String[] {brokerName, String.valueOf(vm.getId()),
+            vmData.add(new String[] { brokerName, String.valueOf(vm.getId()),
                     String.valueOf(df.format(vmLoad)),
                     String.valueOf(Math.round(vm.getTotalExecutionTime())),
-                });
+            });
         }
 
         double makespan = computeMakespan(cloudletFinishedList);
         double cpuUtilization = computeCpuUsage(broker, vmList, cloudletFinishedList);
         double throughput = vmList.size() / (double) makespan;
-        MetricsData.add(new String[] {brokerName, String.valueOf(df.format(makespan)),
-                String.valueOf(df.format(cpuUtilization)), String.valueOf(df.format(throughput))});
+        MetricsData.add(new String[] { brokerName, String.valueOf(df.format(makespan)),
+                String.valueOf(df.format(cpuUtilization)), String.valueOf(df.format(throughput)) });
     }
 
     /**
@@ -174,7 +179,7 @@ public class ComparativeSimulation {
     private double computeVMLoad(Vm vm, List<Cloudlet> cloudletList) {
         Map<Long, List<Integer>> Vm2Cloudlet = matchVmsToCloudlets(cloudletList);
         List<Integer> cloudlets = Vm2Cloudlet.get(vm.getId());
-        return cloudlets != null ? (double) cloudlets.size() / (double )cloudletList.size() : 0.0;
+        return cloudlets != null ? (double) cloudlets.size() / (double) cloudletList.size() : 0.0;
     }
 
     /**
@@ -196,13 +201,15 @@ public class ComparativeSimulation {
             List<Integer> cloudlets = Vm2Cloudlet.get(vm.getId());
             if (cloudlets != null){
                 for (int cloudletId : cloudlets) {
-                    totalCpuTime += cloudletList.get(cloudletId).getActualCpuTime();
+                    Cloudlet current = cloudletList.get(cloudletId);
+                    totalCpuTime += current.getActualCpuTime();
                 }
             }
             totalCpuUsage += totalTime > 0 ? totalCpuTime / totalTime : 0;
         }
         return totalCpuUsage / vmList.size();
     }
+
 
     /**
      * 

@@ -12,22 +12,22 @@ hosts:
     ram: [10240000]        # RAM in MB
     storage: [10240000]    # Disk in MB
     bw: [100000]         # Bandwithd in MB
-    vmScheduler: 0       # Timeshared for VMS
+    vmScheduler: 1       # Timeshared for VMS
     heterogeneous: False # If heterogeneous or homogeneous
 
 # [a,b] its interpreted as a random value between a an b. 
 # VMs Configuration
 vms:
-  - pesNumber: [1,12]      # from 1 to 64 PEs
+  - pesNumber: [6,12]      # from 1 to 64 PEs
     mips: [10,400]       # 1000 MIPS fijos
-    ram: [2048,16384]      # RAM fija de 2048 MB
+    ram: [16384]      # RAM fija de 2048 MB
     storage: [100000]      # Almacenamiento fijo de 10000 MB
     bw: [512]              # Ancho de banda fijo de 1000 Mbps
-    taskScheduler: 1       # SpaceShared
+    taskScheduler: 1      # SpaceShared
 
 # Tasks Configuration (Cloudlets)
 tasks:
-  pesNumber: [1,12]       # Number of PEs
+  pesNumber: [1,6]       # Number of PEs
   length: [6000, 9000]     # Cloudlet length interval in Mips
-  fileSize: [1024, 10240] # Cloudlet File size interval in MBs
+  fileSize: [1024] # Cloudlet File size interval in MBs
   outputSize: [512]       # Size of the output from a cloudlet in MB
