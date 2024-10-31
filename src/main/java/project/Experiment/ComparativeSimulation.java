@@ -38,6 +38,8 @@ public class ComparativeSimulation {
     private List<String[]> cloudletData = new ArrayList<>();
     private List<String[]> vmData = new ArrayList<>();
     private ArrayList<String[]> MetricsData = new ArrayList<>();
+    private ArrayList<String[]> CloudleCharstData = new ArrayList<>();
+    private ArrayList<String[]> VmCharsData = new ArrayList<>();
 
     public ComparativeSimulation(DatacenterConfig datacenterConfig) {
         this.taskGenerator = new RandomTaskGenerator(datacenterConfig.tasks, 10);
@@ -51,6 +53,8 @@ public class ComparativeSimulation {
         vmData.add(new String[] { "Broker", "VM ID", "VM Load", "Total Execution Time" });
         // Header for Metrics
         MetricsData.add(new String[] { "Broker", "Maskespan", "Cpu Utilization", "Throughput" });
+        CloudleCharstData.add(new String[] { "Cloudlet", "Pes", "Lenght" });
+        VmCharsData.add(new String[] { "Vm", "Pes", "Mips" });
     }
 
     /**
@@ -70,26 +74,40 @@ public class ComparativeSimulation {
         createSimulatedAnnealingHeuristic();
         brokerHeuristic.setHeuristic(heuristic);
 
-        ArrayList<Cloudlet> taskList1 = taskGenerator.generate();
-        ArrayList<Vm> vmList1 = vmGenerator.generate();
-
-        ArrayList<Cloudlet> taskList2 = taskGenerator.generate();
-        ArrayList<Vm> vmList2 = vmGenerator.generate();
-
-        ArrayList<Cloudlet> taskList3 = taskGenerator.generate();
-        ArrayList<Vm> vmList3 = vmGenerator.generate();
+        ArrayList<Cloudlet> taskList = taskGenerator.generate();
+        ArrayList<Vm> vmList = vmGenerator.generate();
 
         // Ejecutar simulaciones secuenciales
-        executeBrokerSimulation(brokerSimple, taskList1, vmList1);
-        executeBrokerSimulation(brokerPSO, taskList2, vmList2);
-        executeBrokerSimulation(brokerHeuristic, taskList3, vmList3);
+        executeBrokerSimulation(brokerSimple, taskList, vmList);
+        executeBrokerSimulation(brokerPSO, taskList, vmList);
+        executeBrokerSimulation(brokerHeuristic, taskList, vmList);
+
+
+        for (Cloudlet cloudlet : taskList) {
+            CloudleCharstData.add(new String[] {
+                String.valueOf(cloudlet.getId()),
+                String.valueOf(cloudlet.getPesNumber()),
+                String.valueOf(cloudlet.getLength()),
+            });
+        }
+
+        for (Vm vm : vmList) {
+            VmCharsData.add(new String[] {
+                String.valueOf(vm.getId()),
+                String.valueOf(vm.getPesNumber()),
+                String.valueOf(vm.getMips()),
+            });
+        }
+
 
         // Save csvs
         CSVWriter.writeCSV(savePath.concat("/cloudlets_results.csv"), cloudletData);
         CSVWriter.writeCSV(savePath.concat("/vms_results.csv"), vmData);
         CSVWriter.writeCSV(savePath.concat("/brokers_results.csv"), MetricsData);
+        CSVWriter.writeCSV(savePath.concat("/vms_chars.csv"), VmCharsData);
+        CSVWriter.writeCSV(savePath.concat("/cloudlet_chars.csv"), CloudleCharstData);
     }
-
+    
     /**
      * Executes the simulation for an specific DatacenterBroker
      * 
@@ -168,6 +186,7 @@ public class ComparativeSimulation {
         double throughput = vmList.size() / (double) makespan;
         MetricsData.add(new String[] { brokerName, String.valueOf(df.format(makespan)),
                 String.valueOf(df.format(cpuUtilization)), String.valueOf(df.format(throughput)) });
+        
     }
 
     /**
