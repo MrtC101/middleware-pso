@@ -18,7 +18,6 @@ public class RunScenarios {
         int[] vmsNumbers = {1, 3, 6, 9, 15};
         int[] cloudletsNumber = {25, 50, 100, 150, 200};
         DatacenterConfig datacenterConfig = YamlReader.readConfig(confPath);
-        int i = 0;
         for (int vmsN : vmsNumbers) {
             for (int cloudN : cloudletsNumber) {
                 //@TODO modificar para que la cantidad d ecloudlets y de maquinas virtuales este separada
@@ -29,9 +28,8 @@ public class RunScenarios {
                 }
                 ComparativeSimulation sim =
                         new ComparativeSimulation(datacenterConfig);
-                String resultPath = resPath.concat(String.format("/scenario-%d-%d-%d", i, vmsN, cloudN));
+                String resultPath = resPath.concat(String.format("/scenario-%d-%d", vmsN, cloudN));
                 sim.runSimulation(resultPath);
-                i++;
             }
         }
     }

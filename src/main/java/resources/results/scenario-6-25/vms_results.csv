@@ -1,0 +1,19 @@
+Broker,VM ID,VM Load,Total Execution Time
+DatacenterBrokerSimple,0,0.2,380
+DatacenterBrokerSimple,1,0.16,380
+DatacenterBrokerSimple,2,0.16,380
+DatacenterBrokerSimple,3,0.16,380
+DatacenterBrokerSimple,4,0.16,380
+DatacenterBrokerSimple,5,0.16,380
+DatacenterBrokerPSO,0,0.2,206
+DatacenterBrokerPSO,1,0.24,206
+DatacenterBrokerPSO,2,0.04,206
+DatacenterBrokerPSO,3,0.2,206
+DatacenterBrokerPSO,4,0.28,206
+DatacenterBrokerPSO,5,0.04,206
+DatacenterBrokerHeuristic,0,0.24,339
+DatacenterBrokerHeuristic,1,0.16,339
+DatacenterBrokerHeuristic,2,0.12,339
+DatacenterBrokerHeuristic,3,0.16,339
+DatacenterBrokerHeuristic,4,0.12,339
+DatacenterBrokerHeuristic,5,0.2,339
