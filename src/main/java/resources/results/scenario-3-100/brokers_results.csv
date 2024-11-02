@@ -1,4 +1,4 @@
 Broker,Maskespan,Cpu Utilization,Throughput
 DatacenterBrokerSimple,1869.16,1.44,0
-DatacenterBrokerPSO,704.57,2.08,0
-DatacenterBrokerHeuristic,1692.34,1.38,0
+DatacenterBrokerPSO,738.12,1.99,0
+DatacenterBrokerHeuristic,2104.75,1.27,0

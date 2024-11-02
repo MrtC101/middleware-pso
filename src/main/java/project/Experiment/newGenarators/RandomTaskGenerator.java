@@ -29,6 +29,13 @@ public class RandomTaskGenerator{
         cloudlet.setOutputSize(outputSize);
         return cloudlet;
     }
+    private Cloudlet createCloudlet(long fileSize, long outputSize, long pesNumber, long length) {
+        CloudletSimple cloudlet;
+        cloudlet = new CloudletSimple(length, pesNumber);
+        cloudlet.setFileSize(fileSize);
+        cloudlet.setOutputSize(outputSize);
+        return cloudlet;
+    }
 
     /**
      * Generates a list of Cloudlets (tasks) based on the provided configuration settings, using
@@ -49,5 +56,13 @@ public class RandomTaskGenerator{
             taskList.add(createCloudlet(fileSize, outputSize, pesNumber, length));
         }
         return taskList;
+    }
+
+    public ArrayList<Cloudlet> cloneDeep(ArrayList<Cloudlet> tasks) {
+        ArrayList<Cloudlet> clonedTasks = new ArrayList<>(tasks.size());
+        for (Cloudlet task : tasks) {
+            clonedTasks.add(createCloudlet(task.getFileSize(), task.getOutputSize(), task.getPesNumber(), task.getLength()));
+        }
+        return clonedTasks;
     }
 }

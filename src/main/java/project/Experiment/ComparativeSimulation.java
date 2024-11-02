@@ -77,11 +77,16 @@ public class ComparativeSimulation {
         ArrayList<Cloudlet> taskList = taskGenerator.generate();
         ArrayList<Vm> vmList = vmGenerator.generate();
 
+        ArrayList<Cloudlet> taskList2 = taskGenerator.cloneDeep(taskList);
+        ArrayList<Vm> vmList2 = vmGenerator.cloneDeep(vmList);
+
+        ArrayList<Cloudlet> taskList3 = taskGenerator.cloneDeep(taskList);
+        ArrayList<Vm> vmList3 = vmGenerator.cloneDeep(vmList);
+
         // Ejecutar simulaciones secuenciales
         executeBrokerSimulation(brokerSimple, taskList, vmList);
-        executeBrokerSimulation(brokerPSO, taskList, vmList);
-        executeBrokerSimulation(brokerHeuristic, taskList, vmList);
-
+        executeBrokerSimulation(brokerPSO, taskList2, vmList2);
+        executeBrokerSimulation(brokerHeuristic, taskList3, vmList3);
 
         for (Cloudlet cloudlet : taskList) {
             CloudleCharstData.add(new String[] {

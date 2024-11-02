@@ -1,6 +1,8 @@
 package project.Experiment.newGenarators;
 
 import java.util.ArrayList;
+
+import org.cloudsimplus.schedulers.cloudlet.CloudletScheduler;
 import org.cloudsimplus.schedulers.cloudlet.CloudletSchedulerCompletelyFair;
 import org.cloudsimplus.schedulers.cloudlet.CloudletSchedulerSpaceShared;
 import org.cloudsimplus.schedulers.cloudlet.CloudletSchedulerTimeShared;
@@ -11,8 +13,10 @@ import project.Experiment.Generators.Generator;
 import project.Utils.RandomUtils;
 
 /**
- * VMGenerator class generates Virtual Machines (VMs) based on the provided configuration. It
- * supports both homogeneous and heterogeneous VM configurations, with random variations in certain
+ * VMGenerator class generates Virtual Machines (VMs) based on the provided
+ * configuration. It
+ * supports both homogeneous and heterogeneous VM configurations, with random
+ * variations in certain
  * parameters.
  */
 public class RandomVmGenerator implements Generator<Vm> {
@@ -37,7 +41,7 @@ public class RandomVmGenerator implements Generator<Vm> {
      * Constructor that takes the VM configuration list and a random seed.
      * 
      * @param vmConfigs List of VM configuration settings
-     * @param seed Random seed for generating random numbers
+     * @param seed      Random seed for generating random numbers
      */
     public RandomVmGenerator(ArrayList<DatacenterConfig.VmConfig> vmConfigs, int seed) {
         this.vmConfigs = vmConfigs;
@@ -56,13 +60,14 @@ public class RandomVmGenerator implements Generator<Vm> {
     /**
      * Creates a VM with the specified parameters.
      * 
-     * @param mips MIPS rating for the VM's PEs
-     * @param ram Amount of RAM for the VM
-     * @param pesNumber Number of PEs (cores) assigned to the VM
-     * @param bw Bandwidth allocated to the VM
-     * @param storage Storage capacity for the VM
-     * @param taskScheduler The type of task scheduler to use (TimeShared, SpaceShared, or
-     *        CompletelyFair)
+     * @param mips          MIPS rating for the VM's PEs
+     * @param ram           Amount of RAM for the VM
+     * @param pesNumber     Number of PEs (cores) assigned to the VM
+     * @param bw            Bandwidth allocated to the VM
+     * @param storage       Storage capacity for the VM
+     * @param taskScheduler The type of task scheduler to use (TimeShared,
+     *                      SpaceShared, or
+     *                      CompletelyFair)
      * @return A new Vm object with the specified configuration
      */
     private Vm createVM(int mips, int ram, int pesNumber, int bw, int storage, int taskScheduler) {
@@ -80,8 +85,25 @@ public class RandomVmGenerator implements Generator<Vm> {
         return vm;
     }
 
+    // double, Resource, long, Resource, Resource, int
+    private Vm createVM(double mips, long ram, long pesNumber, long bw, long storage, int taskScheduler) {
+        // Create a simple VM with the specified MIPS and PEs
+        Vm vm = new VmSimple(mips, pesNumber);
+        vm.setRam(ram).setBw(bw).setSize(storage); // Set RAM, bandwidth, and storage for the VM
+
+        // Set the appropriate task scheduler for the VM
+        if (taskScheduler == T_SCHEDULER_TIMESHARED)
+            vm.setCloudletScheduler(new CloudletSchedulerTimeShared());
+        if (taskScheduler == T_SCHEDULER_SPACESHARED)
+            vm.setCloudletScheduler(new CloudletSchedulerSpaceShared());
+        if (taskScheduler == T_SCHEDULER_COMPLETELYFAIR)
+            vm.setCloudletScheduler(new CloudletSchedulerCompletelyFair());
+        return vm;
+    }
+
     /**
-     * Generates a list of VMs based on the provided configuration settings, using random values for
+     * Generates a list of VMs based on the provided configuration settings, using
+     * random values for
      * certain parameters based on predefined multipliers.
      * 
      * @return A list of generated VMs
@@ -101,8 +123,28 @@ public class RandomVmGenerator implements Generator<Vm> {
                 storage = rand.getRandomNumberBetween(vmConfig.storage);
                 vmList.add(createVM(mips, ram, pesNumber, bw, storage, vmConfig.taskScheduler));
             }
-        
+
         }
         return vmList; // Return the generated VM list
+    }
+
+    private int getTaskSchedulerType(CloudletScheduler scheduler) {
+        if (scheduler.getClass().equals(CloudletSchedulerTimeShared.class))
+            return T_SCHEDULER_TIMESHARED;
+        if (scheduler.getClass().equals(CloudletSchedulerSpaceShared.class))
+            return T_SCHEDULER_SPACESHARED;
+        if (scheduler.getClass().equals(CloudletSchedulerCompletelyFair.class))
+            return T_SCHEDULER_COMPLETELYFAIR;
+        return T_SCHEDULER_TIMESHARED;
+    }
+
+    public ArrayList<Vm> cloneDeep(ArrayList<Vm> vms) {
+        ArrayList<Vm> clonedVMs = new ArrayList<>(vms.size());
+        for (Vm vm : vms) {
+            clonedVMs.add(createVM(vm.getMips(), vm.getRam().getCapacity(), vm.getPesNumber(), vm.getBw().getCapacity(),
+                    vm.getStorage().getCapacity(),
+                    getTaskSchedulerType(vm.getCloudletScheduler())));
+        }
+        return clonedVMs;
     }
 }
