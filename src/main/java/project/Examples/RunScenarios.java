@@ -15,8 +15,8 @@ public class RunScenarios {
         String confPath = "src/main/java/resources/configs/config.yaml";
         String resPath = "src/main/java/resources/results";
         //int seed = 10;
-        int[] vmsNumbers = {1, 3, 6, 9, 15};
-        int[] cloudletsNumber = {25, 50, 100, 150, 200};
+        int[] vmsNumbers = {1, 2, 4,  8, 16, 32, 64, 128};
+        int[] cloudletsNumber = {500};
         DatacenterConfig datacenterConfig = YamlReader.readConfig(confPath);
         for (int vmsN : vmsNumbers) {
             for (int cloudN : cloudletsNumber) {

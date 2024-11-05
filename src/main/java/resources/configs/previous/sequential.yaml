@@ -35,11 +35,3 @@ tasks:
   outputSize: [500]           # Tamaño de salida fijo de 500 MB
   pesNumber: [2]                 # PEs fijos
   length: [10000]            # Longitud de tarea fija de 10000 MI
-
-
-
-#1- Hacer tareas que duren de manera aleatoria diferente tiempo
-#2- Hacer el escenario secuencial
-#4- Ver si se pueden construir los escenarios que hizo el otro grupo.
-
-#Metricas: Makespan, Laod ratio, througput, Desviacióne standar de carga
