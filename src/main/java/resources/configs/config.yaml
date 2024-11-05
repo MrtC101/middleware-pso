@@ -8,9 +8,9 @@ costPerBw: 0.002
 hosts:
   - size: [1] 
     pesNumber: [100000]  # Number of PEs
-    mips: [2000]       # Processors speed in mips 
+    mips: [200000]       # Processors speed in mips 
     ram: [10240000]        # RAM in MB
-    storage: [10240000]    # Disk in MB
+    storage: [20240000]    # Disk in MB
     bw: [100000]         # Bandwithd in MB
     vmScheduler: 1       # Timeshared for VMS
     heterogeneous: False # If heterogeneous or homogeneous
